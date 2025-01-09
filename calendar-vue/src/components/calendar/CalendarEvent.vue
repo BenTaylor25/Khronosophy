@@ -39,9 +39,14 @@ export default {
   position: absolute;
   height: 5rem;
   background-color: lime;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  cursor: pointer;
 
   p {
     color: black;
+    font-size: 0.75rem;
+    margin: 0;
   }
 }
 </style>
