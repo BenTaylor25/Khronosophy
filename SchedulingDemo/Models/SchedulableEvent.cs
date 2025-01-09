@@ -1,6 +1,6 @@
 
 
-namespace KhronosScheduling.Models;
+namespace SchedulingDemo.Models;
 
 public class SchedulableEvent(
     string name,

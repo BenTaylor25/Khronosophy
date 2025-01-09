@@ -1,5 +1,5 @@
 
-namespace KhronosScheduling.Models;
+namespace SchedulingDemo.Models;
 
 public class StaticEvent(
     string name,

@@ -1,6 +1,6 @@
-using KhronosScheduling.Models;
+using SchedulingDemo.Models;
 
-namespace KhronosScheduling.Services;
+namespace SchedulingDemo.Services;
 
 public interface IScheduler
 {
