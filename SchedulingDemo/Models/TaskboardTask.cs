@@ -1,7 +1,7 @@
 
 namespace SchedulingDemo.Models;
 
-public class Task(
+public class TaskboardTask(
     string name,
     TimeSpan expectedDuration
 )

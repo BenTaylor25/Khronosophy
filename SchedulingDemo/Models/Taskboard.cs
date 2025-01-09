@@ -3,7 +3,7 @@ namespace SchedulingDemo.Models;
 
 public class Taskboard
 {
-    public List<Task> Tasks { get; set;}
+    public List<TaskboardTask> Tasks { get; set;}
 
     public Taskboard()
     {
