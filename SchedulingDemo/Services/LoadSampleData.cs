@@ -6,13 +6,11 @@ public static class LoadSampleData
 {
     public static User GetUserWithTasks()
     {
-        User user = new User();
-
-        user.Taskboard = new Taskboard();
-        user.Calendar = new Calendar();
+        User user = new();
 
         user.Taskboard.Tasks = [
-            new TaskboardTask("test 1", 4)
+            new TaskboardTask("test 1", TimeSpan.FromHours(3)),
+            new TaskboardTask("test 2", TimeSpan.FromHours(4))
         ];
 
         return user;
