@@ -5,13 +5,15 @@ namespace SchedulingDemo.Models;
 public class SchedulableEvent(
     string name,
     DateTime startDateTime,
-    DateTime endDateTime
+    DateTime endDateTime,
+    TaskboardTask parentTask
 ) : IEvent
 {
     public string Name { get; set; } = name;
     public DateTime StartDateTime { get; set; } = startDateTime;
     public DateTime EndDateTime { get; set; } = endDateTime;
-    public bool IsScheduled = false;
+    public TaskboardTask ParentTask { get; set;} = parentTask;
+    // public bool IsScheduled = false;
 
     public TimeSpan Duration
     {

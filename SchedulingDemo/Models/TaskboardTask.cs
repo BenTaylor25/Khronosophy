@@ -8,5 +8,6 @@ public class TaskboardTask(
 {
     public string Name { get; set; } = name;
     public TimeSpan ExpectedDuration = expectedDuration;
+    public List<SchedulableEvent> Events = [];
 }
 
