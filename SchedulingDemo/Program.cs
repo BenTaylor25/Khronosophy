@@ -5,9 +5,10 @@ User user = LoadSampleData.GetUserWithTasks();
 
 foreach (var task in user.Taskboard.Tasks)
 {
-    Console.WriteLine(task.Name);
+    Console.WriteLine($"{task.Name}: ~ {task.ExpectedDuration.Hours}hrs");
 }
 
+Console.WriteLine();
 Console.WriteLine("---");
 
 DumbScheduler scheduler = new();
