@@ -2,7 +2,7 @@
 
 namespace SchedulingDemo.Models;
 
-public class SchedulableEvent(
+public class ScheduledEvent(
     string name,
     DateTime startDateTime,
     DateTime endDateTime,

@@ -56,7 +56,7 @@ public class DumbScheduler : IScheduler
                     timeToSchedule > timeUntilEndOfDay ?
                     timeUntilEndOfDay : timeToSchedule;
 
-                SchedulableEvent schedulableEvent = new(
+                ScheduledEvent schedulableEvent = new(
                     task.Name,
                     nextEventStart,
                     nextEventStart + eventDuration,
