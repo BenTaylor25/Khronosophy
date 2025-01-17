@@ -8,5 +8,11 @@ https://yuml.me/diagram/boring/class/draw
 
 [Calendar]++>0*[<<interface>> IEvent]
 
-[<<interface>> IEvent]^[SchedulableEvent]
 [<<interface>> IEvent]^[StaticEvent]
+[<<interface>> IEvent]^[ScheduledEvent]
+
+[ScheduledEvent]++>1[TaskboardTask]
+[TaskboardTask]++>0*[ScheduledEvent]
+
+[TaskboardTask].-.[note: TaskboardTasks (objectives) hold references to all of the ScheduledEvents (scheduled time blocks) where they are focused on.]
+[ScheduledEvent].-.[note: ScheduledEvents hold a reference back to the parent TaskboardTask.]
