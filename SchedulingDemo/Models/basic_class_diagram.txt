@@ -1,0 +1,12 @@
+https://yuml.me/diagram/boring/class/draw
+
+
+[User]++>1[Calendar]
+[User]++>1[Taskboard]
+
+[Taskboard]++>0*[TaskboardTask]
+
+[Calendar]++>0*[<<interface>> IEvent]
+
+[<<interface>> IEvent]^[SchedulableEvent]
+[<<interface>> IEvent]^[StaticEvent]
