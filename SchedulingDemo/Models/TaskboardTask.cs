@@ -1,13 +1,19 @@
+using SchedulingDemo.Models.Enums;
 
 namespace SchedulingDemo.Models;
 
 public class TaskboardTask(
     string name,
-    TimeSpan expectedDuration
+    TimeSpan expectedDuration,
+    double? importance,
+    string? intensity
 )
 {
     public string Name { get; set; } = name;
-    public TimeSpan ExpectedDuration = expectedDuration;
-    public List<ScheduledEvent> Events = [];
+    public TimeSpan ExpectedDuration { get; set; } = expectedDuration;
+    public List<ScheduledEvent> Events { get; set; } = [];
+    public double? Importance { get; set; } = importance;
+    public Intensity? Intensity { get; set; } =
+        IntensityHelper.ParseNullable(intensity);
 }
 
