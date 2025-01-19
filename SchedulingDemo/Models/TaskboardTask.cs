@@ -5,8 +5,8 @@ namespace SchedulingDemo.Models;
 public class TaskboardTask(
     string name,
     TimeSpan expectedDuration,
-    double? importance,
-    string? intensity
+    double? importance = null,
+    string? intensity = null
 )
 {
     public string Name { get; set; } = name;

@@ -20,7 +20,9 @@ public static class IntensityHelper
             LOW => Intensity.Low,
             MEDIUM => Intensity.Medium,
             HIGH => Intensity.High,
-            _ => throw new ArgumentException($"Invalid intensity: {intensity}"),
+            _ => throw new ArgumentException(
+                $"Invalid intensity: {intensity}"
+            ),
         };
 
     public static Intensity? ParseNullable(string? intensity) =>
@@ -32,6 +34,8 @@ public static class IntensityHelper
             Intensity.Low => LOW,
             Intensity.Medium => MEDIUM,
             Intensity.High => HIGH,
-            _ => throw new ArgumentException($"Invalid intensity: {intensity}"),
+            _ => throw new ArgumentException(
+                $"Invalid intensity: {intensity}"
+            ),
         };
 }
