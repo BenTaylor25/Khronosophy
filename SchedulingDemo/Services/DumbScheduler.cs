@@ -60,11 +60,12 @@ public class DumbScheduler : IScheduler
                         new DateTime(
                             nextEventStart.Year,
                             nextEventStart.Month,
-                            nextEventStart.Day + 1,
+                            nextEventStart.Day,
                             DAY_START.Hour,
                             DAY_START.Minute,
                             DAY_START.Second
-                        );
+                        )
+                            .AddDays(1);
 
                     timeUntilEndOfDay =
                         DAY_END - TimeOnly.FromDateTime(nextEventStart);
