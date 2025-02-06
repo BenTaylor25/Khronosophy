@@ -1,4 +1,7 @@
 
+using SchedulingDemo.Models.Settings;
+using SchedulingDemo.Services;
+
 namespace SchedulingDemo.Models.Enums;
 
 public enum Intensity
@@ -36,6 +39,20 @@ public static class IntensityHelper
             Intensity.High => HIGH,
             _ => throw new ArgumentException(
                 $"Invalid intensity: {intensity}"
-            ),
+            )
+        };
+
+    public static int? IntensityValue(
+        Intensity intensity,
+        UTMTKSettings settings
+    ) =>
+        intensity switch
+        {
+            Intensity.Low => settings.LowIntensityValue,
+            Intensity.Medium => settings.MediumIntensityValue,
+            Intensity.High => settings.HighIntensityValue,
+            _ => throw new ArgumentException(
+                $"Invalid intensity {intensity}"
+            )
         };
 }

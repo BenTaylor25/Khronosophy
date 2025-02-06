@@ -8,4 +8,5 @@ public class User(int? dailyIntensityCapacity = null)
 
     public int? DailyIntensityCapacity { get; set; } =
         dailyIntensityCapacity;
+
 }

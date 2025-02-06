@@ -1,7 +1,8 @@
 ﻿using SchedulingDemo.Models;
+using SchedulingDemo.Models.Settings;
 using SchedulingDemo.Services;
 
-User user = LoadSampleData.GetUserWithTasks();
+User user = LoadSampleData.GetUserWithTasksAndIntensities();
 
 foreach (var task in user.Taskboard.Tasks)
 {
@@ -11,7 +12,9 @@ foreach (var task in user.Taskboard.Tasks)
 Console.WriteLine();
 Console.WriteLine("---");
 
-DumbScheduler scheduler = new();
+UTMTKSettings settings = new(3, 2, 1, 10, 5, 2);
+
+IScheduler scheduler = new UTMTKScheduler(settings);
 scheduler.ScheduleUsersTasks(user);
 
 user.Calendar.Print();
