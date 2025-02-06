@@ -76,7 +76,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
             if (task.Intensity is Intensity intensity)
             {
                 int? intensityValue =
-                    IntensityHelper.IntensityValue(intensity, settings);
+                    IntensityHelper.IntensityValue(intensity, Settings);
 
                 bool hasCapacityForTask =
                     runningCapacity + intensityValue <=
