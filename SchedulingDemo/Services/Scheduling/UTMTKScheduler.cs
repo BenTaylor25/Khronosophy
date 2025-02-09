@@ -1,5 +1,4 @@
 using SchedulingDemo.Models;
-using SchedulingDemo.Models.Enums;
 using SchedulingDemo.Models.Settings;
 
 namespace SchedulingDemo.Services.Scheduling;
@@ -53,6 +52,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
         bool isTimeLeftInDay =
             timeUntilEndOfDay >= MINIMIUM_EVENT_LENGTH;
 
+        //
         List<EventRequest> tasksForToday =
             SelectTasksForDay(user, tasksByImportance);
 
