@@ -1,7 +1,7 @@
 
 using SchedulingDemo.Models;
 
-namespace SchedulingDemo.Services;
+namespace SchedulingDemo.Services.Scheduling;
 
 public class ETFScheduler : IScheduler
 {
