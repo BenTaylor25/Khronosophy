@@ -53,45 +53,74 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
         bool isTimeLeftInDay =
             timeUntilEndOfDay >= MINIMIUM_EVENT_LENGTH;
 
-        List<TaskboardTask> tasksForToday =
-            SelectTasksForToday(user, tasksByImportance);
+        List<EventRequest> tasksForToday =
+            SelectTasksForDay(user, tasksByImportance);
 
         Console.WriteLine("tasks for today");
-        foreach (TaskboardTask task in tasksForToday) {
-            Console.WriteLine(task.Name);
+        foreach (EventRequest eventRequest in tasksForToday) {
+            Console.WriteLine(eventRequest.ParentTask?.Name);
         }
     }
 
-    private List<TaskboardTask> SelectTasksForToday(
+    /// <summary>
+    /// Priority 1: keep intensity balance in check.
+    /// <br />
+    /// Priority 2: if there are insufficient low-intensity tasks,
+    /// introduce extra time breaks.
+    /// <br />
+    /// Priority 3: select the most important task.
+    /// </summary>
+    private List<EventRequest> SelectTasksForDay(
         User user,
-        List<TaskboardTask> tasksByImportance
+        List<TaskboardTask> tasksByImportance,
+        double numHoursLeftInDay
     )
     {
-        List<TaskboardTask> tasksForToday = [];
+        List<EventRequest> tasksForDay = [];
 
-        int runningCapacity = 0;
+        bool eventAddedThisIteration;
 
-        foreach (TaskboardTask task in tasksByImportance)
+        do
         {
-            if (task.Intensity is Intensity intensity)
+            eventAddedThisIteration = false;
+
+            foreach (TaskboardTask task in tasksByImportance)
             {
-                int? intensityValue =
-                    IntensityHelper.IntensityValue(intensity, Settings);
+                double averageIntensity = AverageIntensity(tasksForDay);
 
-                bool hasCapacityForTask =
-                    runningCapacity + intensityValue <=
-                    user.DailyIntensityCapacity;
-
-                if (hasCapacityForTask)
+                const double MAGIC_NUMBER = 14;
+                if (task.Intensity + averageIntensity <= MAGIC_NUMBER)
                 {
-                    // intensityValue is not null here.
-                    runningCapacity += intensityValue ?? 0;
-                    tasksForToday.Add(task);
+                    TimeSpan duration = TimeSpan.FromHours(1);  //
+
+                    tasksForDay.Add(
+                        new EventRequest(task, duration)
+                    );
                 }
             }
+        } while (eventAddedThisIteration);
+
+        return tasksForDay;
+    }
+
+    private static double AverageIntensity(
+        List<EventRequest> eventRequests
+    )
+    {
+        if (eventRequests.Count == 0)
+        {
+            return 0;
         }
 
-        return tasksForToday;
+        int totalIntensity = 0;
+
+        foreach (EventRequest eventRequest in eventRequests)
+        {
+            // totalIntensity += eventRequest.Intensity;
+        }
+
+        double averageIntensity = totalIntensity / eventRequests.Count;
+        return averageIntensity;
     }
 
     private bool AreParametersValid(User user)
