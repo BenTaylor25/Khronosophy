@@ -31,15 +31,15 @@ public static class LoadSampleData
         };
 
         user.Taskboard.Tasks = [
-            new TaskboardTask("test 1", TimeSpan.FromHours(3), 10, "high"),
-            new TaskboardTask("test 2", TimeSpan.FromHours(4), 10, "high"),
-            new TaskboardTask("test 3", TimeSpan.FromHours(2), 10, "high"),
-            new TaskboardTask("test 4", TimeSpan.FromHours(6), 10, "high"),
-            new TaskboardTask("test 5", TimeSpan.FromHours(3), 10, "high"),
-            new TaskboardTask("test 6", TimeSpan.FromHours(1), 10, "high"),
-            new TaskboardTask("test 7", TimeSpan.FromHours(3), 10, "high"),
-            new TaskboardTask("test 8", TimeSpan.FromHours(2), 10, "low"),
-            new TaskboardTask("test 9", TimeSpan.FromHours(2), 10, "high"),
+            new TaskboardTask("test 1", TimeSpan.FromHours(3), 10, 8),
+            new TaskboardTask("test 2", TimeSpan.FromHours(4), 10, 7),
+            new TaskboardTask("test 3", TimeSpan.FromHours(2), 10, 10),
+            new TaskboardTask("test 4", TimeSpan.FromHours(6), 10, 9),
+            new TaskboardTask("test 5", TimeSpan.FromHours(3), 10, 9),
+            new TaskboardTask("test 6", TimeSpan.FromHours(1), 10, 10),
+            new TaskboardTask("test 7", TimeSpan.FromHours(3), 10, 7),
+            new TaskboardTask("test 8", TimeSpan.FromHours(2), 10, 2),
+            new TaskboardTask("test 9", TimeSpan.FromHours(2), 10, 8),
         ];
 
         return user;

@@ -1,6 +1,7 @@
 ﻿using SchedulingDemo.Models;
 using SchedulingDemo.Models.Settings;
 using SchedulingDemo.Services;
+using SchedulingDemo.Services.Scheduling;
 
 User user = LoadSampleData.GetUserWithTasksAndIntensities();
 

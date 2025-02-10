@@ -74,7 +74,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
     private List<EventRequest> SelectTasksForDay(
         User user,
         List<TaskboardTask> tasksByImportance,
-        double hoursUntilEndOfDay
+        double unscheduledHoursUntilEndOfDay
     )
     {
         List<EventRequest> tasksForDay = [];
@@ -92,16 +92,22 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
                 // Maximum sum of average and next intensity.
                 const double MAGIC_NUMBER = 14;
 
-                if (task.Intensity + averageIntensity <= MAGIC_NUMBER)
+                if (
+                    task.Intensity + averageIntensity <= MAGIC_NUMBER &&
+                    unscheduledHoursUntilEndOfDay > 1
+                )
                 {
                     // TODO: Check that task needs to be scheduled more time.
 
                     TimeSpan duration =
-                        TimeSpan.FromHours(hoursUntilEndOfDay);
+                        TimeSpan.FromHours(unscheduledHoursUntilEndOfDay);
 
                     tasksForDay.Add(
                         new EventRequest(task, duration)
                     );
+
+                    unscheduledHoursUntilEndOfDay -=
+                        Helpers.TimeSpanUpToDecimalHours(duration);
 
                     eventAddedThisIteration = true;
                 }
@@ -111,11 +117,12 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
 
             if (
                 !eventAddedThisIteration &&
-                hoursUntilEndOfDay > MAX_UNACCOUNTED_TIME
+                unscheduledHoursUntilEndOfDay > MAX_UNACCOUNTED_TIME
                 // TODO: Check that their is time to be scheduled in taskboard.
             )
             {
                 tasksForDay.Add(Constants.EVENT_REQUEST_BREAK);
+                unscheduledHoursUntilEndOfDay -= 1;
                 eventAddedThisIteration = true;
             }
         }
