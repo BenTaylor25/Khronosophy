@@ -48,13 +48,14 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
 
         TimeSpan timeUntilEndOfDay =
             DAY_END - TimeOnly.FromDateTime(nextEventStart);
+        double hoursUntilEndOfDay =
+            Helpers.TimeSpanDownToDecimalHours(timeUntilEndOfDay);
 
         bool isTimeLeftInDay =
             timeUntilEndOfDay >= MINIMIUM_EVENT_LENGTH;
 
-        //
         List<EventRequest> tasksForToday =
-            SelectTasksForDay(user, tasksByImportance);
+            SelectTasksForDay(user, tasksByImportance, hoursUntilEndOfDay);
 
         Console.WriteLine("tasks for today");
         foreach (EventRequest eventRequest in tasksForToday) {
@@ -73,7 +74,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
     private List<EventRequest> SelectTasksForDay(
         User user,
         List<TaskboardTask> tasksByImportance,
-        double numHoursLeftInDay
+        double hoursUntilEndOfDay
     )
     {
         List<EventRequest> tasksForDay = [];
@@ -88,17 +89,37 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
             {
                 double averageIntensity = AverageIntensity(tasksForDay);
 
+                // Maximum sum of average and next intensity.
                 const double MAGIC_NUMBER = 14;
+
                 if (task.Intensity + averageIntensity <= MAGIC_NUMBER)
                 {
-                    TimeSpan duration = TimeSpan.FromHours(1);  //
+                    // TODO: Check that task needs to be scheduled more time.
+
+                    TimeSpan duration =
+                        TimeSpan.FromHours(hoursUntilEndOfDay);
 
                     tasksForDay.Add(
                         new EventRequest(task, duration)
                     );
+
+                    eventAddedThisIteration = true;
                 }
             }
-        } while (eventAddedThisIteration);
+
+            const int MAX_UNACCOUNTED_TIME = 1;
+
+            if (
+                !eventAddedThisIteration &&
+                hoursUntilEndOfDay > MAX_UNACCOUNTED_TIME
+                // TODO: Check that their is time to be scheduled in taskboard.
+            )
+            {
+                tasksForDay.Add(Constants.EVENT_REQUEST_BREAK);
+                eventAddedThisIteration = true;
+            }
+        }
+        while (eventAddedThisIteration);
 
         return tasksForDay;
     }
