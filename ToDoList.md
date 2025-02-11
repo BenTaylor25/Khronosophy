@@ -1,5 +1,13 @@
 # To Do List:
 
+## SCHEDULING
+
+### UTMTK
+- Check if tasks require further time to be allocated to them.
+  - Currently seeing a 2 hour task allocated 2.5 hours.
+- Check 15 minute increments
+  - Currently seeing event scheduled between 18:10 - 20:40.
+
 ## Frontend
 - Account Handling.
 - Display Events according to UTC time rather than local time?
