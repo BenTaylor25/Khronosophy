@@ -22,7 +22,10 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
         }
 
         List<TaskboardTask> tasksByImportance =
-            user.Taskboard.Tasks.OrderBy(task => task.Importance).ToList();
+            user.Taskboard.Tasks
+                .OrderBy(task => task.Importance)
+                .Reverse()
+                .ToList();
 
         DateTime nextEventStart = new(
             DateTime.UtcNow.Year,
@@ -58,6 +61,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
             SelectTasksForDay(user, tasksByImportance, hoursUntilEndOfDay);
 
         Console.WriteLine("tasks for today");
+        Console.WriteLine(tasksForToday.Count);
         foreach (EventRequest eventRequest in tasksForToday) {
             Console.WriteLine(eventRequest.ParentTask?.Name);
         }
@@ -100,7 +104,10 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
                     // TODO: Check that task needs to be scheduled more time.
 
                     TimeSpan duration =
-                        TimeSpan.FromHours(unscheduledHoursUntilEndOfDay);
+                        GetDurationForEventRequest(
+                            task,
+                            unscheduledHoursUntilEndOfDay
+                        );
 
                     tasksForDay.Add(
                         new EventRequest(task, duration)
@@ -140,15 +147,46 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
             return 0;
         }
 
-        int totalIntensity = 0;
+        double totalIntensity = 0;
 
         foreach (EventRequest eventRequest in eventRequests)
         {
-            // totalIntensity += eventRequest.Intensity;
+            totalIntensity += eventRequest.ParentTask?.Intensity ?? 0;
         }
 
         double averageIntensity = totalIntensity / eventRequests.Count;
         return averageIntensity;
+    }
+
+    private static TimeSpan GetDurationForEventRequest(
+        TaskboardTask task,
+        double unscheduledHoursUntilEndOfDay
+    )
+    {
+        if (task.Intensity is double intensity)
+        {
+            // Linear interpolation of:
+            // intensity  0 --> 4 hours
+            // intensity 10 --> 1 hour
+            double maxTaskTimeHours = 4 - (3 * intensity / 10);
+
+            // Round up to the next 15 minutes.
+            double maxTaskTimeHoursQuarterHourIncrement =
+                Math.Ceiling(4 * maxTaskTimeHours) / 4;
+
+            // double remainingTaskDurationToScheduleHours = something on task
+
+            double durationHours = Math.Min(
+                maxTaskTimeHoursQuarterHourIncrement,
+                unscheduledHoursUntilEndOfDay
+                // task duration to schedule
+            );
+
+            return TimeSpan.FromHours(durationHours);
+        }
+
+        // TODO: handle better?
+        return TimeSpan.FromHours(0);
     }
 
     private bool AreParametersValid(User user)
