@@ -69,12 +69,15 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
             tasksForToday
                 .OrderByDescending(task => task.ParentTask?.Intensity ?? 0)
                 .ToList();
+        // TODO: Restrict adjacent tasks to combined intensity < 15.
 
-        Console.WriteLine("tasks for today");
-        Console.WriteLine(tasksForToday.Count);
-        foreach (EventRequest eventRequest in tasksForTodayByIntensity) {
-            Console.WriteLine(eventRequest.ParentTask?.Name);
-        }
+        // Console.WriteLine("tasks for today");
+        // Console.WriteLine(tasksForToday.Count);
+        // foreach (EventRequest eventRequest in tasksForTodayByIntensity) {
+        //     Console.WriteLine(eventRequest.ParentTask?.Name);
+        // }
+
+        PushTimeBlocks(user, tasksForTodayByIntensity);
     }
 
     /// <summary>
@@ -166,6 +169,51 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
 
         double averageIntensity = totalIntensity / eventRequests.Count;
         return averageIntensity;
+    }
+
+    public static void PushTimeBlocks(
+        User user,
+        List<EventRequest> eventRequests
+    )
+    {
+        // Handle explicit time breaks.
+
+        DateTime nextEventStart = new DateTime(
+            DateTime.UtcNow.Year,
+            DateTime.UtcNow.Month,
+            DateTime.UtcNow.Day,
+            DateTime.UtcNow.Hour,
+            0,
+            0
+        )
+            .AddHours(1);
+
+        foreach (EventRequest eventRequest in eventRequests)
+        {
+            if (
+                eventRequest.ParentTask is TaskboardTask parentTask &&
+                parentTask.Intensity is double intensity
+            )
+            {
+                ScheduledEvent scheduledEvent = new(
+                    parentTask.Name,
+                    nextEventStart,
+                    nextEventStart + eventRequest.Duration,
+                    parentTask
+                );
+
+                parentTask.Events.Add(scheduledEvent);
+                user.Calendar.Events.Add(scheduledEvent);
+
+                TimeSpan breakDuration = TimeSpan.FromHours(
+                    eventRequest.Duration.TotalHours *
+                    intensity / 20
+                );
+
+                nextEventStart =
+                    scheduledEvent.EndDateTime + breakDuration;
+            }
+        }
     }
 
     private static TimeSpan GetDurationForEventRequest(
