@@ -23,8 +23,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
 
         List<TaskboardTask> tasksByImportance =
             user.Taskboard.Tasks
-                .OrderBy(task => task.Importance)
-                .Reverse()
+                .OrderByDescending(task => task.Importance)
                 .ToList();
 
         DateTime nextEventStart = new(
@@ -60,9 +59,20 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
         List<EventRequest> tasksForToday =
             SelectTasksForDay(user, tasksByImportance, hoursUntilEndOfDay);
 
+        // Console.WriteLine("tasks for today");
+        // Console.WriteLine(tasksForToday.Count);
+        // foreach (EventRequest eventRequest in tasksForToday) {
+        //     Console.WriteLine(eventRequest.ParentTask?.Name);
+        // }
+
+        List<EventRequest> tasksForTodayByIntensity =
+            tasksForToday
+                .OrderByDescending(task => task.ParentTask?.Intensity ?? 0)
+                .ToList();
+
         Console.WriteLine("tasks for today");
         Console.WriteLine(tasksForToday.Count);
-        foreach (EventRequest eventRequest in tasksForToday) {
+        foreach (EventRequest eventRequest in tasksForTodayByIntensity) {
             Console.WriteLine(eventRequest.ParentTask?.Name);
         }
     }

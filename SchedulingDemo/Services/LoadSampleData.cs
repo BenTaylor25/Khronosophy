@@ -34,11 +34,11 @@ public static class LoadSampleData
             new TaskboardTask("test 1", TimeSpan.FromHours(3), 3, 8),
             new TaskboardTask("test 2", TimeSpan.FromHours(4), 2, 7),
             new TaskboardTask("test 3", TimeSpan.FromHours(2), 1, 10),
-            new TaskboardTask("test 4", TimeSpan.FromHours(6), 10, 9),
+            new TaskboardTask("test 4", TimeSpan.FromHours(6), 5, 2),
             new TaskboardTask("test 5", TimeSpan.FromHours(3), 4, 9),
             new TaskboardTask("test 6", TimeSpan.FromHours(1), 6, 10),
             new TaskboardTask("test 7", TimeSpan.FromHours(3), 7, 7),
-            new TaskboardTask("test 8", TimeSpan.FromHours(2), 5, 2),
+            new TaskboardTask("test 8", TimeSpan.FromHours(2), 10, 9),
             new TaskboardTask("test 9", TimeSpan.FromHours(2), 9, 8),
         ];
 
