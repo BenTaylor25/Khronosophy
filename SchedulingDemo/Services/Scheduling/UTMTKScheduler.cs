@@ -26,14 +26,15 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
                 .OrderByDescending(task => task.Importance)
                 .ToList();
 
-        DateTime nextEventStart = new(
+        DateTime nextEventStart = new DateTime(
             DateTime.UtcNow.Year,
             DateTime.UtcNow.Month,
             DateTime.UtcNow.Day,
-            DateTime.UtcNow.Hour + 1,
+            DateTime.UtcNow.Hour,
             0,
             0
-        );
+        )
+            .AddHours(1);
 
         if (TimeOnly.FromDateTime(nextEventStart) >= DAY_END)
         {
@@ -45,7 +46,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
                 DAY_START.Minute,
                 DAY_START.Second
             )
-                .AddHours(1);
+                .AddDays(1);
         }
 
         TimeSpan timeUntilEndOfDay =
@@ -77,7 +78,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
         //     Console.WriteLine(eventRequest.ParentTask?.Name);
         // }
 
-        PushTimeBlocks(user, tasksForTodayByIntensity);
+        PushTimeBlocks(user, tasksForTodayByIntensity, nextEventStart);
     }
 
     /// <summary>
@@ -173,20 +174,11 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
 
     public static void PushTimeBlocks(
         User user,
-        List<EventRequest> eventRequests
+        List<EventRequest> eventRequests,
+        DateTime nextEventStart
     )
     {
         // Handle explicit time breaks.
-
-        DateTime nextEventStart = new DateTime(
-            DateTime.UtcNow.Year,
-            DateTime.UtcNow.Month,
-            DateTime.UtcNow.Day,
-            DateTime.UtcNow.Hour,
-            0,
-            0
-        )
-            .AddHours(1);
 
         foreach (EventRequest eventRequest in eventRequests)
         {
