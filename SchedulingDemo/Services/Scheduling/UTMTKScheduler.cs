@@ -197,10 +197,13 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
                 parentTask.Events.Add(scheduledEvent);
                 user.Calendar.Events.Add(scheduledEvent);
 
-                TimeSpan breakDuration = TimeSpan.FromHours(
-                    eventRequest.Duration.TotalHours *
-                    intensity / 20
-                );
+                TimeSpan breakDuration =
+                    Helpers.TimeSpanToNextFifteenMinutes(
+                        TimeSpan.FromHours(
+                            eventRequest.Duration.TotalHours *
+                            intensity / 20
+                        )
+                    );
 
                 nextEventStart =
                     scheduledEvent.EndDateTime + breakDuration;

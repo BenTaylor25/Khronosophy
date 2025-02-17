@@ -19,7 +19,7 @@ public static class Helpers
     }
 
     /// <summary>
-    /// Rounds up to the next whole 15 minutes.
+    /// Rounds down to the previous whole 15 minutes.
     /// </summary>
     public static double TimeSpanDownToDecimalHours(TimeSpan timeSpan)
     {
@@ -32,5 +32,45 @@ public static class Helpers
         double minutesComponent = Math.Floor(timeSpan.Minutes / 15d) / 4;
 
         return hoursComponent + minutesComponent;
+    }
+
+    /// <summary>
+    /// Rounds a TimeSpan up to the next whole 15 minutes.
+    /// </summary>
+    public static TimeSpan TimeSpanToNextFifteenMinutes(TimeSpan timeSpan)
+    {
+        double minutesWithDecimalSeconds =
+            timeSpan.Minutes + (timeSpan.Seconds / 60);
+
+        int roundedMinutes =
+            (int)Math.Ceiling(minutesWithDecimalSeconds / 15) * 15;
+
+        return new TimeSpan(
+            timeSpan.Days,
+            timeSpan.Hours,
+            roundedMinutes,
+            0
+        );
+    }
+
+    /// <summary>
+    /// Rounds a TimeSpan down to the previous whole 15 minutes.
+    /// </summary>
+    public static TimeSpan TimeSpanToPreviousFifteenMinutes(
+        TimeSpan timeSpan
+    )
+    {
+        double minutesWithDecimalSeconds =
+            timeSpan.Minutes + (timeSpan.Seconds / 60);
+
+        int roundedMinutes =
+            (int)Math.Floor(minutesWithDecimalSeconds / 15) * 15;
+
+        return new TimeSpan(
+            timeSpan.Days,
+            timeSpan.Hours,
+            roundedMinutes,
+            0
+        );
     }
 }
