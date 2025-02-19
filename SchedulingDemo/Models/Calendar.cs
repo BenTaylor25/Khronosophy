@@ -21,17 +21,29 @@ public class Calendar
 
         foreach (IEvent calendarEvent in sortedEvents)
         {
-            if (previousDate != DateOnly.FromDateTime(calendarEvent.StartDateTime))
+            DateOnly todaysDate =
+                DateOnly.FromDateTime(calendarEvent.StartDateTime);
+
+            if (previousDate != todaysDate)
             {
-                previousDate = DateOnly.FromDateTime(calendarEvent.StartDateTime);
+                previousDate = todaysDate;
                 Console.WriteLine();
                 Console.WriteLine(previousDate);
             }
 
-            string startTime = TimeOnly.FromDateTime(calendarEvent.StartDateTime).ToString();
-            string endTime = TimeOnly.FromDateTime(calendarEvent.EndDateTime).ToString();
+            string startTime =
+                TimeOnly
+                    .FromDateTime(calendarEvent.StartDateTime)
+                    .ToString();
 
-            Console.WriteLine($"{calendarEvent.Name}   :   {startTime} - {endTime}");
+            string endTime =
+                TimeOnly
+                    .FromDateTime(calendarEvent.EndDateTime)
+                    .ToString();
+
+            Console.WriteLine(
+                $"{calendarEvent.Name}   :   {startTime} - {endTime}"
+            );
         }
     }
 }

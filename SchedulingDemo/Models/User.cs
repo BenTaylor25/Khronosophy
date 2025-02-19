@@ -1,14 +1,12 @@
 
 namespace SchedulingDemo.Models;
 
-public class User
+public class User(int? dailyIntensityCapacity = null)
 {
-    public Taskboard Taskboard { get; set; }
-    public Calendar Calendar { get; set; }
+    public Taskboard Taskboard { get; set; } = new Taskboard();
+    public Calendar Calendar { get; set; } = new Calendar();
 
-    public User()
-    {
-        Taskboard = new Taskboard();
-        Calendar = new Calendar();
-    }
+    public int? DailyIntensityCapacity { get; set; } =
+        dailyIntensityCapacity;
+
 }
