@@ -11,8 +11,12 @@ https://yuml.me/diagram/boring/class/draw
 [<<interface>> IEvent]^[StaticEvent]
 [<<interface>> IEvent]^[ScheduledEvent]
 
-[ScheduledEvent]++>1[TaskboardTask]
+[EventRequest]->1[TaskboardTask]
+[EventRequest].-.[note: EventRequests are temporary Task instances with a\nspecified duration but no start or end time.]
+
+[ScheduledEvent]->1[TaskboardTask]
 [TaskboardTask]++>0*[ScheduledEvent]
 
-[TaskboardTask].-.[note: TaskboardTasks (objectives) hold references to all of the ScheduledEvents (scheduled time blocks) where they are focused on.]
-[ScheduledEvent].-.[note: ScheduledEvents hold a reference back to the parent TaskboardTask.]
+[TaskboardTask].-.[note: TaskboardTasks (objectives) hold references to all of the\nScheduledEvents (scheduled time blocks) where they are focused on.]
+[ScheduledEvent].-.[note: ScheduledEvents hold a reference\nback to the parent TaskboardTask.]
+
