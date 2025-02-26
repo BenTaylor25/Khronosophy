@@ -1,13 +1,18 @@
 using Calendar.Constants;
+using Calendar.Models;
 using Calendar.Services.CalendarEvents;
+using Calendar.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddControllers();
+
     builder.Services
-        .AddSingleton<ICalendarEventsService, CalendarEventsService>();
+        .AddSingleton<ICalendarEventsService, CalendarEventsService>()
+        .AddSingleton<IUserService, UserService>();
+
     builder.Services.Configure<IISServerOptions>(options =>
     {
         options.MaxRequestBodySize = Constants.API_REQUEST_MAX_BODY_SIZE;
@@ -36,3 +41,5 @@ var app = builder.Build();
 }
 
 app.Run();
+
+// TODO: Create REST API for Models
