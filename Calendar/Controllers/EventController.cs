@@ -1,4 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
 
+using ErrorOr;
+
+using Calendar.Models;
+using Calendar.Models.Events;
 using Calendar.Services.UserService;
 using Calendar.Services.EventService;
 using Calendar.Services.TaskboardService;
@@ -21,4 +26,29 @@ public class EventController : AppBaseController
         _eventService = eventService;
         _taskboardService = taskboardService;
     }
+
+    [HttpGet("/events/{userId}")]
+    public IActionResult GetAllEvents(Guid userId)
+    {
+        ErrorOr<KhronosophyUser> userServiceResponse =
+            _userService.GetUser(userId);
+
+        if (userServiceResponse.IsError)
+        {
+            return Problem("User does not exist");
+        }
+        KhronosophyUser user = userServiceResponse.Value;
+
+        ErrorOr<List<IEvent>> eventServiceResponse =
+            _eventService.GetUserEvents(user);
+
+        if (eventServiceResponse.IsError)
+        {
+            return Problem("Could not retreive user's events.");
+        }
+        List<IEvent> userEvents = eventServiceResponse.Value;
+
+        return Ok(userEvents);
+    }
+
 }
