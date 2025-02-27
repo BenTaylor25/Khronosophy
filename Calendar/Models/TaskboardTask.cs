@@ -35,7 +35,7 @@ public class TaskboardTask
     )
     {
         bool taskInvalid =
-            name.Length < 0 ||
+            name.Length == 0 ||
             expectedDuration.TotalMinutes % 15 != 0 ||
             importance < 0 ||
             importance > 10 ||
