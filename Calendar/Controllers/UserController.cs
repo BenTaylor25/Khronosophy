@@ -50,14 +50,9 @@ public class UserController : AppBaseController
     }
 
     [HttpPost("/user")]
-    public IActionResult CreateUser(
-        [FromBody] UserControllerCreateBody requestBody
-    )
+    public IActionResult CreateUser()
     {
-        ErrorOr<KhronosophyUser> userResponse = KhronosophyUser.Create(
-            null,
-            requestBody.DailyIntensityCapacity
-        );
+        ErrorOr<KhronosophyUser> userResponse = KhronosophyUser.Create();
 
         if (userResponse.IsError)
         {

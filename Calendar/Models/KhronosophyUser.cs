@@ -18,7 +18,7 @@ public class KhronosophyUser
     }
 
     public static ErrorOr<KhronosophyUser> Create(
-        Guid? id,
+        Guid? id = null,
         int? dailyIntensityCapacity = null
     )
     {
