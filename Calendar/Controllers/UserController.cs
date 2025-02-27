@@ -4,7 +4,6 @@ using ErrorOr;
 
 using Calendar.Models;
 using Calendar.Services.UserService;
-using Calendar.Controllers.RequestBodies;
 
 namespace Calendar.Controllers;
 
