@@ -5,6 +5,7 @@ using ErrorOr;
 using Calendar.Services.Taskboard;
 using Calendar.Services.UserService;
 using Calendar.Models;
+using Calendar.Controllers.RequestBodies;
 
 namespace Calendar.Controllers;
 
@@ -46,4 +47,41 @@ public class TaskboardController : AppBaseController
         return Ok(userTasks);
     }
 
+    [HttpPost("/taskboard")]
+    public IActionResult AddTask(
+        [FromBody] TaskControllerAddBody requestBody
+    )
+    {
+        ErrorOr<KhronosophyUser> userServiceResponse =
+            _userService.GetUser(requestBody.UserId);
+
+        if (userServiceResponse.IsError)
+        {
+            return Problem("User does not exist");
+        }
+        KhronosophyUser user = userServiceResponse.Value;
+
+        ErrorOr<TaskboardTask> taskResponse = TaskboardTask.Create(
+            requestBody.Name,
+            TimeSpan.FromMinutes(requestBody.ExpectedDurationMinutes),
+            requestBody.Importance,
+            requestBody.Intensity
+        );
+
+        if (taskResponse.IsError)
+        {
+            return Problem("Could not create task.");
+        }
+        TaskboardTask task = taskResponse.Value;
+
+        ErrorOr<Success> taskboardServiceResponse =
+            _taskboardService.AddTaskToUser(user, task);
+
+        if (taskboardServiceResponse.IsError)
+        {
+            return Problem("Could not add task to user.");
+        }
+
+        return Ok(task);
+    }
 }

@@ -10,4 +10,13 @@ public class TaskboardService : ITaskboardService
     {
         return user.Taskboard.Tasks;
     }
+
+    public ErrorOr<Success> AddTaskToUser(
+        KhronosophyUser user,
+        TaskboardTask task
+    )
+    {
+        user.Taskboard.Tasks.Add(task);
+        return new Success();
+    }
 }
