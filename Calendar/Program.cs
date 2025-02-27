@@ -1,6 +1,7 @@
 using Calendar.Constants;
 using Calendar.Models;
 using Calendar.Services.CalendarEvents;
+using Calendar.Services.Taskboard;
 using Calendar.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services
         .AddSingleton<ICalendarEventsService, CalendarEventsService>()
-        .AddSingleton<IUserService, UserService>();
+        .AddSingleton<IUserService, UserService>()
+        .AddSingleton<ITaskboardService, TaskboardService>();
 
     builder.Services.Configure<IISServerOptions>(options =>
     {
