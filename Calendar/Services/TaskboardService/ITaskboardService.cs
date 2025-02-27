@@ -2,7 +2,7 @@ using ErrorOr;
 
 using Calendar.Models;
 
-namespace Calendar.Services.Taskboard;
+namespace Calendar.Services.TaskboardService;
 
 public interface ITaskboardService
 {

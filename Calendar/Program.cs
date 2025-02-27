@@ -1,8 +1,9 @@
 using Calendar.Constants;
-using Calendar.Services.Taskboard;
 using Calendar.Services.UserService;
+using Calendar.Services.EventService;
+using Calendar.Services.TaskboardService;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services
         .AddSingleton<IUserService, UserService>()
+        .AddSingleton<IEventService, EventService>()
         .AddSingleton<ITaskboardService, TaskboardService>();
 
     builder.Services.Configure<IISServerOptions>(options =>
@@ -26,7 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
     });
 }
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 {
     if (app.Environment.IsDevelopment())
     {

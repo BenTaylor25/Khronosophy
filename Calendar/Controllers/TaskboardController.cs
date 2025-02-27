@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using ErrorOr;
 
-using Calendar.Services.Taskboard;
+using Calendar.Services.TaskboardService;
 using Calendar.Services.UserService;
 using Calendar.Models;
 using Calendar.Controllers.RequestBodies;
