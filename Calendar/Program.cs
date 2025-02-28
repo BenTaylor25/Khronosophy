@@ -42,5 +42,3 @@ WebApplication app = builder.Build();
 }
 
 app.Run();
-
-// TODO: Create REST API for Models

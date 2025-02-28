@@ -28,9 +28,8 @@ public class UserController : AppBaseController
 
         if (serviceResponse.IsError)
         {
-            return Problem("Database not populated");
+            return Problem("Database not populated.");
         }
-
         Guid id = serviceResponse.Value;
 
         return Ok(id);
@@ -64,7 +63,7 @@ public class UserController : AppBaseController
         
         if (createUserResponse.IsError)
         {
-            return Problem("Could not add User to system");
+            return Problem("Could not add User to system.");
         }
         return Ok(user);
     }

@@ -36,7 +36,7 @@ public class EventController : AppBaseController
 
         if (userServiceResponse.IsError)
         {
-            return Problem("User does not exist");
+            return Problem("User does not exist.");
         }
         KhronosophyUser user = userServiceResponse.Value;
 
@@ -62,7 +62,7 @@ public class EventController : AppBaseController
 
         if (userServiceResponse.IsError)
         {
-            return Problem("User does not exist");
+            return Problem("User does not exist.");
         }
         KhronosophyUser user = userServiceResponse.Value;
 

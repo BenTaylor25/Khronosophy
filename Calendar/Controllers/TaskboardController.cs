@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 
 using ErrorOr;
 
-using Calendar.Services.TaskboardService;
-using Calendar.Services.UserService;
 using Calendar.Models;
 using Calendar.Controllers.RequestBodies;
+using Calendar.Services.UserService;
+using Calendar.Services.TaskboardService;
 
 namespace Calendar.Controllers;
 
@@ -31,7 +31,7 @@ public class TaskboardController : AppBaseController
 
         if (userServiceResponse.IsError)
         {
-            return Problem("User does not exist");
+            return Problem("User does not exist.");
         }
         KhronosophyUser user = userServiceResponse.Value;
 
@@ -57,7 +57,7 @@ public class TaskboardController : AppBaseController
 
         if (userServiceResponse.IsError)
         {
-            return Problem("User does not exist");
+            return Problem("User does not exist.");
         }
         KhronosophyUser user = userServiceResponse.Value;
 
