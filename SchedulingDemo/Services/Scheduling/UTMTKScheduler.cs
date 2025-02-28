@@ -26,14 +26,15 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
                 .OrderByDescending(task => task.Importance)
                 .ToList();
 
-        DateTime nextEventStart = new(
+        DateTime nextEventStart = new DateTime(
             DateTime.UtcNow.Year,
             DateTime.UtcNow.Month,
             DateTime.UtcNow.Day,
-            DateTime.UtcNow.Hour + 1,
+            DateTime.UtcNow.Hour,
             0,
             0
-        );
+        )
+            .AddHours(1);
 
         if (TimeOnly.FromDateTime(nextEventStart) >= DAY_END)
         {
