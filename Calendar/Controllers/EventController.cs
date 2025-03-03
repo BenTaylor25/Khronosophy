@@ -3,114 +3,91 @@ using Microsoft.AspNetCore.Mvc;
 using ErrorOr;
 
 using Calendar.Models;
-using Calendar.Services.CalendarEvents;
+using Calendar.Models.Events;
+using Calendar.Services.UserService;
+using Calendar.Services.EventService;
+using Calendar.Services.TaskboardService;
 using Calendar.Controllers.RequestBodies;
-using Calendar.Controllers.RequestParameters;
 
 namespace Calendar.Controllers;
 
 public class EventController : AppBaseController
 {
-    private readonly ICalendarEventsService _eventService;
+    private readonly IUserService _userService;
+    private readonly IEventService _eventService;
+    private readonly ITaskboardService _taskboardService;
 
-    public EventController(ICalendarEventsService eventService)
-    {
-        _eventService = eventService;
-    }
-
-    [HttpGet("/calendarEvent")]
-    public IActionResult GetAllCalendarEvents(
-        [FromQuery] EventControllerGetAllParameters requestParameters
+    public EventController(
+        IUserService userService,
+        IEventService eventService,
+        ITaskboardService taskboardService
     )
     {
-        ErrorOr<List<CalendarEvent>> serviceResponse =
-            _eventService.GetAllCalendarEvents(
-                requestParameters?.After,
-                requestParameters?.Before
-            );
-
-        if (serviceResponse.IsError)
-        {
-            return Problem("Couldn't get Calendar Events.");
-        }
-
-        List<CalendarEvent> calendarEvents = serviceResponse.Value;
-
-        return Ok(calendarEvents);
+        _userService = userService;
+        _eventService = eventService;
+        _taskboardService = taskboardService;
     }
 
-    [HttpGet("/calendarEvent/{id}")]
-    public IActionResult GetCalendarEventById(Guid id)
+    [HttpGet("/events/{userId}")]
+    public IActionResult GetAllEvents(Guid userId)
     {
-        ErrorOr<CalendarEvent> serviceResponse =
-            _eventService.GetCalendarEventById(id);
+        ErrorOr<KhronosophyUser> userServiceResponse =
+            _userService.GetUser(userId);
 
-        if (serviceResponse.IsError)
+        if (userServiceResponse.IsError)
         {
-            return Problem("Couldn't find event.");
+            return Problem("User does not exist.");
         }
+        KhronosophyUser user = userServiceResponse.Value;
 
-        CalendarEvent calendarEvent = serviceResponse.Value;
+        ErrorOr<List<IEvent>> eventServiceResponse =
+            _eventService.GetUserEvents(user);
 
-        return Ok(calendarEvent);
+        if (eventServiceResponse.IsError)
+        {
+            return Problem("Could not retreive user's events.");
+        }
+        List<IEvent> userEvents = eventServiceResponse.Value;
+
+        return Ok(userEvents);
     }
 
-    [HttpPost("/calendarEvent")]
-    public IActionResult AddCalendarEvent(
+    [HttpPost("/event")]
+    public IActionResult AddEvent(
         [FromBody] EventControllerAddBody requestBody
     )
     {
-        ErrorOr<CalendarEvent> calendarEventResult = CalendarEvent.Create(
+        ErrorOr<KhronosophyUser> userServiceResponse =
+            _userService.GetUser(requestBody.UserId);
+
+        if (userServiceResponse.IsError)
+        {
+            return Problem("User does not exist.");
+        }
+        KhronosophyUser user = userServiceResponse.Value;
+
+        ErrorOr<StaticEvent> eventResponse = StaticEvent.Create(
             requestBody.Name,
             requestBody.StartDateTime,
             requestBody.EndDateTime
         );
 
-        if (calendarEventResult.IsError)
+        if (eventResponse.IsError)
         {
-            return Problem("could not create object");
+            return Problem("Could not create event.");
         }
-        CalendarEvent calendarEvent = calendarEventResult.Value;
+        StaticEvent staticEvent = eventResponse.Value;
 
-        ErrorOr<Updated> addValueResponse =
-            _eventService.AddCalendarEvent(calendarEvent);
+        // ErrorOr<Success> taskboardServiceResponse =
+        //     _taskboardService.AddTaskToUser(user, task);
+        ErrorOr<Success> eventServiceResponse =
+            _eventService.AddEventToUser(user, staticEvent);
 
-        if (addValueResponse.IsError)
+        if (eventServiceResponse.IsError)
         {
-            return Problem("could not add event");
+            return Problem("Could not add event to user.");
         }
-        return Ok(calendarEvent);
-    }
 
-    [HttpPut("/calendarEvent/{id}")]
-    public IActionResult UpdateCalendarEvent(
-        [FromBody] EventControllerUpdateBody requestBody,
-        Guid id
-    )
-    {
-        ErrorOr<Updated> serviceResponse =
-            _eventService.UpdateCalendarEvent(
-                id,
-                requestBody
-            );
-
-        if (serviceResponse.IsError)
-        {
-            return Problem("could not update event");
-        }
-        return Ok();
-    }
-
-    [HttpDelete("/calendarEvent/{id}")]
-    public IActionResult DeleteCalendarEvent(Guid id)
-    {
-        ErrorOr<Deleted> serviceResponse =
-            _eventService.DeleteCalendarEvent(id);
-
-        if (serviceResponse.IsError)
-        {
-            return Problem("could not delete event");
-        }
-        return Ok();
+        return Ok(staticEvent);
     }
 }

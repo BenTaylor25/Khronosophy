@@ -1,13 +1,19 @@
 using Calendar.Constants;
-using Calendar.Services.CalendarEvents;
+using Calendar.Services.UserService;
+using Calendar.Services.EventService;
+using Calendar.Services.TaskboardService;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddControllers();
+
     builder.Services
-        .AddSingleton<ICalendarEventsService, CalendarEventsService>();
+        .AddSingleton<IUserService, UserService>()
+        .AddSingleton<IEventService, EventService>()
+        .AddSingleton<ITaskboardService, TaskboardService>();
+
     builder.Services.Configure<IISServerOptions>(options =>
     {
         options.MaxRequestBodySize = Constants.API_REQUEST_MAX_BODY_SIZE;
@@ -22,7 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
     });
 }
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 {
     if (app.Environment.IsDevelopment())
     {

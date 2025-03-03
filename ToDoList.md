@@ -1,21 +1,61 @@
 # To Do List:
 
-## SCHEDULING
+## Scheduling
+
+### ETF
+- Implementation.
 
 ### UTMTK
-- Check if tasks require further time to be allocated to them.
-  - Currently seeing a 2 hour task allocated 2.5 hours.
-- Check 15 minute increments
-  - Currently seeing event scheduled between 18:10 - 20:40.
+- Refinements.
+
+### Both
+- Hill Climbing optimisation?
+
+
+## Backend
+
+### REST API
+- User
+  - Update User Info
+    - e.g. Daily intensity capacity
+    - Don't include things like names for now
+- Taskboard
+  - Update task
+    - Params: userId, taskId
+      - Should validate that taskId belongs to userId,
+      but possible optimisation in reading dask directly from DB rather
+      than reading all tasks for the user and seraching?
+  - Delete task
+    - Params: userId, taskId
+- Events
+  - Update (static) Event
+    - Params: userId, eventId
+  - Delete (static) Event
+    - Params: userId, eventId
+  - Delete all scheduled Events for Task
+    - Params: userId, taskId
+  - Delete all scheduled Events for User
+    - Params: userId
+
+### gRPC API
+- Decide if gRPC is really worth it.
+  - REST would work, it just wouldn't be very semantic.
+- Schedule Tasks
+  - Dumb Scheduler
+  - UTMTK
+  - ETF
+
+### Database
+- SQLite.
+
 
 ## Frontend
-- Account Handling.
-- Display Events according to UTC time rather than local time?
 
 ### Zoom
 - Maintain centre point on zoom in and out.
 
 ### Display
+- Display Events according to UTC time rather than local time?
 - Remove '24:00' label from view (like 00:00) so that 24 boxes are shown instead of 25.
 - Handle multi-day events by placing a CalendarEvent instance on each day.
 - Handle parallel events.
@@ -24,11 +64,13 @@
 - Add tooltips to Month view
   - Show date of hover selection.
 
-## Backend
-- Store Events to Database
-  - SQLite or Postgres?
-- Account Handling.
 
-## ICS Processor
+## ICS Processor(?)
+
+### Logistics
+- Do I have time?
+- Is it valuable enough?
+
+### ICS File handling
 - Import events from .ics file.
 - Export events to .ics file.
