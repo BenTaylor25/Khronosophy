@@ -5,13 +5,13 @@ public class TaskControllerAddBody(
     Guid userId,
     string name,
     int expectedDurationMinutes,
-    int importance,   // how to make nullable?
-    int intensity
+    int? importance,
+    int? intensity
 )
 {
     public Guid UserId { get; } = userId;
     public string Name { get; } = name;
     public int ExpectedDurationMinutes { get; } = expectedDurationMinutes;
-    public int Importance { get; } = importance;
-    public int Intensity { get; } = intensity;
+    public int? Importance { get; } = importance;
+    public int? Intensity { get; } = intensity;
 }
