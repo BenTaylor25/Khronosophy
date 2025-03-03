@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {
   showZoomSettingsModal,
-  showYearViewModal
+  showYearViewModal,
+  showTasksModal
 } from '../modalController.ts';
 import { useDateStore } from '../stores/DateStore.ts';
 
@@ -25,6 +26,17 @@ const dateStore = useDateStore();
         @click="showYearViewModal()"
       >
         <p>Year</p>
+      </div>
+
+    </div>
+
+    <div id="central">
+
+      <div
+        id="tasks"
+        @click="showTasksModal()"
+      >
+        <p>Tasks</p>
       </div>
 
     </div>
@@ -59,6 +71,14 @@ const dateStore = useDateStore();
       background: green;
       padding: 0.1rem 0.3rem;
       margin: 1rem;
+      cursor: pointer;
+    }
+  }
+
+  #central {
+    * {
+      background: green;
+      padding: 0.1rem 0.3rem;
       cursor: pointer;
     }
   }

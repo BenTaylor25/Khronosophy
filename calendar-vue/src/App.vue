@@ -6,6 +6,7 @@ import ZoomSettingModal from './components/modals/ZoomSettingModal.vue';
 import NewEventModal from './components/modals/NewEventModal.vue';
 import EditEventModal from './components/modals/EditEventModal.vue';
 import YearViewModal from './components/modals/YearViewModal.vue';
+import TasksModal from './components/modals/TasksModal.vue';
 </script>
 
 <template>
@@ -23,6 +24,7 @@ import YearViewModal from './components/modals/YearViewModal.vue';
   <new-event-modal />
   <edit-event-modal />
   <year-view-modal />
+  <tasks-modal />
 
 </template>
 
