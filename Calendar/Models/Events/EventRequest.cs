@@ -5,7 +5,8 @@ namespace Calendar.Models.Events;
 /// A Task is purely a goal to be completed with no time associated with
 /// it. An Event is a full time block associated with a Task.
 /// An EventRequest is an unscheduled instance of a Task with a desired
-/// duration but no start or end time.
+/// duration but no start or end time. EventRequests are used only as
+/// temporary helper objects in complex scheduling algorithms.
 /// </summary>
 public record EventRequest(
     TaskboardTask? ParentTask,
@@ -20,5 +21,5 @@ public record EventRequest(
 
     public TimeSpan Duration { get; } = Duration;
 
-    // public int Intesity => ParentTask?.Intensity ?? 0;
+    public double Intesity => ParentTask?.Intensity ?? 0;
 }
