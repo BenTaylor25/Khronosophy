@@ -21,8 +21,8 @@ const tasksStore = useTasksStore();
 
       <h1>Tasks</h1>
 
-      <!-- Tasks Heading -->
-       <div class="task">
+      <!-- Tasks Header -->
+       <div id="task-header" class="task">
           <p>Task Name</p>
           <p>Importance</p>
           <p>Intensity</p>
@@ -63,6 +63,7 @@ const tasksStore = useTasksStore();
   bottom: 20%;
   right: 30%;
   min-height: 10rem;
+  overflow: hidden;
 
   &.show {
     display: flex;
@@ -75,13 +76,23 @@ const tasksStore = useTasksStore();
   .task {
     display: flex;
     justify-content: space-evenly;
-    margin: 0 1rem;
     border: 1px solid black;
     color: black;
+
+    margin: 0 0 0 1rem;
+
+    &#task-header {
+      margin: 0 1rem;
+    }
 
     * {
       width: 25%;
     }
+  }
+
+  #existing-tasks {
+    height: 60%;
+    overflow-y: auto;
   }
 }
 </style>
