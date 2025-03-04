@@ -41,6 +41,8 @@ const tasksStore = useTasksStore();
         </div>
       </div>
 
+      <p style="color: red">todo: Add new task</p>
+
     </div>
 
   </modal-shadow>
