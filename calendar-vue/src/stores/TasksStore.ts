@@ -7,6 +7,9 @@ export const useTasksStore = defineStore('tasks', {
         tasks: [
             new TaskboardTaskModel(
                 "test task"
+            ),
+            new TaskboardTaskModel(
+                "test task 2"
             )
         ] as TaskboardTaskModel[]
     }),
