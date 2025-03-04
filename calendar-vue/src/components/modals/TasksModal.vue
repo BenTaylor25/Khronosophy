@@ -82,7 +82,9 @@ const tasksStore = useTasksStore();
     color: black;
 
     margin: 0 0 0 1rem;
-
+    // todo: This works when scroll bar is present but
+    // not when it's not - find a solution that
+    // works for both.
     &#task-header {
       margin: 0 1rem;
     }
