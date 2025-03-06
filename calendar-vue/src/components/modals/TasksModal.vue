@@ -6,6 +6,7 @@ import { useTasksStore } from '../../stores/TasksStore';
 
 import ModalShadow from './ModalShadow.vue';
 import { TaskboardTaskModel } from '../../models/TaskboardTaskModel';
+import { apiCreateNewTask } from '../../api/Tasks/createNewTask';
 
 const tasksStore = useTasksStore();
 </script>
@@ -109,6 +110,7 @@ function createNewTask() {
     newTask.importance = newTaskImportance.value;
     newTask.intensity = newTaskIntensity.value;
 
+    apiCreateNewTask(newTask);
     tasksStore.addTask(newTask);
 
     clearForm();
