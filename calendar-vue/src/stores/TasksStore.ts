@@ -40,7 +40,7 @@ export const useTasksStore = defineStore('tasks', {
             ),
             new TaskboardTaskModel(
                 "test task 2"
-            )
+            ),
         ] as TaskboardTaskModel[]
     }),
     actions: {

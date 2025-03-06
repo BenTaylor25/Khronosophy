@@ -29,19 +29,36 @@ const tasksStore = useTasksStore();
           <p>Delete</p>
        </div>
 
+       <!-- Existing Tasks -->
       <div id="existing-tasks">
         <div
           class="task"
           v-for="task in tasksStore.tasks"
         >
-          <p>{{ task.name }}</p>
-          <p>{{ task.importance || 0 }}</p>
-          <p>{{ task.intensity || 0 }}</p>
-          <p>(delete button)</p>
+          <input :value="task.name" />
+          <input
+            type="number"
+            :value="task.importance || 0"
+            min="0"
+            max="10"
+          />
+          <input
+            type="number"
+            :value="task.intensity || 0"
+            min="0"
+            max="10"
+          />
+          <button>Delete</button>
         </div>
       </div>
 
-      <p style="color: red">todo: Add new task</p>
+      <!-- New Task -->
+      <div id="new-task" class="task">
+        <input type="text" />
+        <input type="number" min="0" max="10" />
+        <input type="number" min="0" max="10" />
+        <button>Create New</button>
+      </div>
 
     </div>
 
@@ -80,14 +97,7 @@ const tasksStore = useTasksStore();
     justify-content: space-evenly;
     border: 1px solid black;
     color: black;
-
-    margin: 0 0 0 1rem;
-    // todo: This works when scroll bar is present but
-    // not when it's not - find a solution that
-    // works for both.
-    &#task-header {
-      margin: 0 1rem;
-    }
+    margin: 0 1rem;
 
     * {
       width: 25%;
@@ -97,6 +107,12 @@ const tasksStore = useTasksStore();
   #existing-tasks {
     height: 60%;
     overflow-y: auto;
+  }
+
+  #new-task {
+    margin-top: 2rem;
+    margin-right: 1rem;
+    border: none;
   }
 }
 </style>
