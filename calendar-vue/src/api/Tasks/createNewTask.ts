@@ -1,4 +1,4 @@
-import { API_CALENDAR_EVENT_ROUTE, API_TASK_ROUTE, JSON_HEADERS, NOT_SYNCED } from "../../constants/api.ts";
+import { API_TASK_ROUTE, JSON_HEADERS } from "../../constants/api.ts";
 import { TaskboardTaskModel } from "../../models/TaskboardTaskModel.ts";
 import { apiGetDefaultUserId } from "../Users/getDefaultUserId.ts";
 
