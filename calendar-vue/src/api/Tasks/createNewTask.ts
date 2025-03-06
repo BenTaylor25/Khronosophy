@@ -1,5 +1,6 @@
 import { API_CALENDAR_EVENT_ROUTE, API_TASK_ROUTE, JSON_HEADERS, NOT_SYNCED } from "../../constants/api.ts";
 import { TaskboardTaskModel } from "../../models/TaskboardTaskModel.ts";
+import { apiGetDefaultUserId } from "../Users/getDefaultUserId.ts";
 
 interface CreateBody {
     userId: string,
@@ -20,7 +21,14 @@ interface CreateResponse {
 export async function apiCreateNewTask(
     task: TaskboardTaskModel
 ) {
-    const userId = "";
+    const userId = await apiGetDefaultUserId();
+
+    //#region Error Handling
+    if (userId === '') {
+        return;
+    }
+    //#endregion
+
     const expectedDurationMinutes = 0; // Oops, forgot about that...
 
     const body = {
@@ -30,8 +38,6 @@ export async function apiCreateNewTask(
         importance: task.importance,
         intensity: task.intensity
     } as CreateBody;
-
-    console.log(body);
 
     await fetch(API_TASK_ROUTE, {
         method: "POST",

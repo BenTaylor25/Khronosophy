@@ -32,7 +32,7 @@ public class UserController : AppBaseController
         }
         Guid id = serviceResponse.Value;
 
-        return Ok(id);
+        return Ok(new { id = id });
     }
 
     [HttpGet("/user/{id}")]
