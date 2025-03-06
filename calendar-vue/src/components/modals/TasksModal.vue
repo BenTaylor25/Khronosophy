@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { MODAL_IDS } from '../../constants/modalConstants';
 import { hideTasksModal } from '../../modalController';
 import { useTasksStore } from '../../stores/TasksStore';
 
 import ModalShadow from './ModalShadow.vue';
+import { TaskboardTaskModel } from '../../models/TaskboardTaskModel';
 
 const tasksStore = useTasksStore();
 </script>
@@ -38,13 +40,13 @@ const tasksStore = useTasksStore();
           <input :value="task.name" />
           <input
             type="number"
-            :value="task.importance || 0"
+            :value="task.importance || ''"
             min="0"
             max="10"
           />
           <input
             type="number"
-            :value="task.intensity || 0"
+            :value="task.intensity || ''"
             min="0"
             max="10"
           />
@@ -53,12 +55,36 @@ const tasksStore = useTasksStore();
       </div>
 
       <!-- New Task -->
-      <div id="new-task" class="task">
-        <input type="text" />
-        <input type="number" min="0" max="10" />
-        <input type="number" min="0" max="10" />
-        <button>Create New</button>
-      </div>
+      <form
+        id="new-task"
+        class="task"
+        @submit.prevent="createNewTask()"
+      >
+        <input
+          id="new-task-name"
+          type="text"
+          v-model="newTaskName"
+        />
+
+        <input
+          id="new-task-importance"
+          type="number"
+          v-model="newTaskImportance"
+          min="0"
+          max="10"
+        />
+
+        <input
+          id="new-task-intensity"
+          type="number"
+          v-model="newTaskIntensity"
+          min="0"
+          max="10"
+        />
+
+        <button type="submit">Create New</button>
+
+      </form>
 
     </div>
 
@@ -67,6 +93,40 @@ const tasksStore = useTasksStore();
 </template>
 
 <script lang="ts">
+const newTaskName = ref('');
+const newTaskImportance = ref(0);
+const newTaskIntensity = ref(0);
+
+function createNewTask() {
+  if (newTaskIsValid()) {
+    const tasksStore = useTasksStore();
+
+    const newTask = new TaskboardTaskModel(
+      newTaskName.value
+    );
+    newTask.importance = newTaskImportance.value;
+    newTask.intensity = newTaskIntensity.value;
+
+    tasksStore.addTask(newTask);
+
+    clearForm();
+  }
+}
+
+function newTaskIsValid(): boolean {
+  return newTaskName.value.length > 0 &&
+    newTaskImportance.value >= 0 &&
+    newTaskImportance.value <= 10 &&
+    newTaskIntensity.value >= 0 &&
+    newTaskIntensity.value <= 10;
+}
+
+function clearForm() {
+  newTaskName.value = "";
+  newTaskImportance.value = 0;
+  newTaskIntensity.value = 0;
+}
+
 </script>
 
 <style scoped lang="scss">
