@@ -19,8 +19,8 @@ export class TaskboardTaskModel {
     get name(): string {
         return this._name;
     }
-    set name(name: string) {
-        this._name = name;
+    set name(newName: string) {
+        this._name = newName;
     }
 
     get importance(): number | null {

@@ -50,7 +50,9 @@ const tasksStore = useTasksStore();
             min="0"
             max="10"
           />
-          <button>Delete</button>
+          <button @click="removeTask(task as TaskboardTaskModel)">
+            Delete
+          </button>
         </div>
       </div>
 
@@ -125,6 +127,12 @@ function clearForm() {
   newTaskName.value = "";
   newTaskImportance.value = 0;
   newTaskIntensity.value = 0;
+}
+
+function removeTask(task: TaskboardTaskModel) {
+  const tasksStore = useTasksStore();
+
+  tasksStore.removeTask(task);
 }
 
 </script>
