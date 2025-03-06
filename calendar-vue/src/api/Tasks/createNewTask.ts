@@ -25,6 +25,7 @@ export async function apiCreateNewTask(
 
     //#region Error Handling
     if (userId === '') {
+        console.error("Couldn't get default user.");
         return;
     }
     //#endregion

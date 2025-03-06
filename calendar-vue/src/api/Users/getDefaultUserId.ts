@@ -7,11 +7,14 @@ interface DefaultUserRespose {
 export async function apiGetDefaultUserId(): Promise<string> {
     const route = `${API_USER_ROUTE}/getDefaultUserId`;
 
+    let defaultUserID = "";
+
     await fetch(route, {
         method: "GET",
         headers: JSON_HEADERS
     })
     .then(async res => {
+        console.log(res);
         if (!res.ok) {
             const err = await res.json();
             throw new Error(err.detail);
@@ -19,7 +22,7 @@ export async function apiGetDefaultUserId(): Promise<string> {
         return res.json();
     })
     .then((body: DefaultUserRespose) => {
-        return body.id;
+        defaultUserID = body.id;
     })
     .catch(err => {
         console.error(
@@ -27,5 +30,5 @@ export async function apiGetDefaultUserId(): Promise<string> {
         );
     });
 
-    return "";
+    return defaultUserID;
 }
