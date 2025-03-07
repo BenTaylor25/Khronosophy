@@ -62,8 +62,6 @@ export const useTasksStore = defineStore('tasks', {
     }
 });
 
-// TODO:
-// apiGetAllTasks().then(useEventStore().tasks.push(t for t in response)).
 apiGetAllTasks()
     .then(tasks => {
         const taskStore = useTasksStore();
@@ -71,4 +69,4 @@ apiGetAllTasks()
         tasks.forEach(task => {
             taskStore.addTask(task)
         });
-    })
+    });
