@@ -15,10 +15,9 @@ interface CreateResponse {
     expectedDuration: string,
     importance: number,
     intensity: number,
-    events: string[] // array of events
+    events: string[] // TODO ARRAY OF EVENTS
 }
 
-// TODO RETURN BOOLEAN SUCCESS VALUE AND HAVE THE UI NOT DISPLAY THE NEW ITEM IF IT FAILS
 export async function apiCreateNewTask(
     task: TaskboardTaskModel
 ): Promise<boolean> {

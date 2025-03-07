@@ -30,6 +30,6 @@ apiGetAllTasks()
         const taskStore = useTasksStore();
 
         tasks.forEach(task => {
-            taskStore.addTask(task)
+            taskStore.addTask(task);
         });
     });
