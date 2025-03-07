@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 import { TaskboardTaskModel } from "../models/TaskboardTaskModel";
+import { apiGetAllTasks } from "../api/Tasks/getAllTasks";
 
 export const useTasksStore = defineStore('tasks', {
     state: () => ({
@@ -63,3 +64,11 @@ export const useTasksStore = defineStore('tasks', {
 
 // TODO:
 // apiGetAllTasks().then(useEventStore().tasks.push(t for t in response)).
+apiGetAllTasks()
+    .then(tasks => {
+        const taskStore = useTasksStore();
+
+        tasks.forEach(task => {
+            taskStore.addTask(task)
+        });
+    })

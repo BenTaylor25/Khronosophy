@@ -14,7 +14,6 @@ export async function apiGetDefaultUserId(): Promise<string> {
         headers: JSON_HEADERS
     })
     .then(async res => {
-        console.log(res);
         if (!res.ok) {
             const err = await res.json();
             throw new Error(err.detail);
