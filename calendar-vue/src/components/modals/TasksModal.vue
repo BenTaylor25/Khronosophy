@@ -57,6 +57,8 @@ const tasksStore = useTasksStore();
         </div>
       </div>
 
+      <p id="error-message">{{ errorMessage || "&nbsp;" }}</p>
+
       <!-- New Task -->
       <form
         id="new-task"
@@ -96,11 +98,13 @@ const tasksStore = useTasksStore();
 </template>
 
 <script lang="ts">
+const errorMessage = ref('');
+
 const newTaskName = ref('');
 const newTaskImportance = ref(0);
 const newTaskIntensity = ref(0);
 
-function createNewTask() {
+async function createNewTask() {
   if (newTaskIsValid()) {
     const tasksStore = useTasksStore();
 
@@ -110,19 +114,33 @@ function createNewTask() {
     newTask.importance = newTaskImportance.value;
     newTask.intensity = newTaskIntensity.value;
 
-    apiCreateNewTask(newTask);
-    tasksStore.addTask(newTask);
+    const serverPushSuccess = await apiCreateNewTask(newTask);
 
-    clearForm();
+    if (serverPushSuccess) {
+      tasksStore.addTask(newTask);
+
+      errorMessage.value = "";
+      clearForm();
+    } else {
+      errorMessage.value = "Could not push task to server.";
+    }
   }
 }
 
 function newTaskIsValid(): boolean {
-  return newTaskName.value.length > 0 &&
+  const isValid = newTaskName.value.length > 0 &&
     newTaskImportance.value >= 0 &&
     newTaskImportance.value <= 10 &&
     newTaskIntensity.value >= 0 &&
     newTaskIntensity.value <= 10;
+
+  if (!isValid) {
+    errorMessage.value = "Invalid information.";
+  } else {
+    errorMessage.value = "";
+  }
+
+  return isValid;
 }
 
 function clearForm() {
@@ -175,7 +193,7 @@ function removeTask(task: TaskboardTaskModel) {
   }
 
   #existing-tasks {
-    height: 60%;
+    height: 55%;
     overflow-y: auto;
   }
 
@@ -183,6 +201,10 @@ function removeTask(task: TaskboardTaskModel) {
     margin-top: 2rem;
     margin-right: 1rem;
     border: none;
+  }
+
+  #error-message {
+    color: red;
   }
 }
 </style>

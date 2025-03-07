@@ -21,17 +21,19 @@ interface CreateResponse {
 // TODO RETURN BOOLEAN SUCCESS VALUE AND HAVE THE UI NOT DISPLAY THE NEW ITEM IF IT FAILS
 export async function apiCreateNewTask(
     task: TaskboardTaskModel
-) {
+): Promise<boolean> {
     const userId = await apiGetDefaultUserId();
 
     //#region Error Handling
     if (userId === '') {
         console.error("Couldn't get default user.");
-        return;
+        return false;
     }
     //#endregion
 
     const expectedDurationMinutes = 0; // Oops, forgot about that...
+
+    let success = false;
 
     const body = {
         userId,
@@ -50,6 +52,7 @@ export async function apiCreateNewTask(
         return res.json();
     })
     .then((body: CreateResponse) => {
+        success = true;
         console.debug(body);
     })
     .catch(err => {
@@ -57,4 +60,6 @@ export async function apiCreateNewTask(
             "Failed to create Task on server - " + err
         );
     });
+
+    return success;
 }
