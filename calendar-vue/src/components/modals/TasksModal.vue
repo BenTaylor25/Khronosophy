@@ -206,5 +206,11 @@ function removeTask(task: TaskboardTaskModel) {
   #error-message {
     color: red;
   }
+
+  button {
+    border-radius: 0;
+    border-width: 1px;
+    border-color: gray;
+  }
 }
 </style>
