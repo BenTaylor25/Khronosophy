@@ -51,6 +51,12 @@
 
 ## Frontend
 
+### Tasks Modal
+- Update Task info.
+  - Pinia stores done, just needs to reference API.
+- Delete Task button.
+  - Pinia stores done, just needs to reference API.
+
 ### Zoom
 - Maintain centre point on zoom in and out.
 
