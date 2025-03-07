@@ -5,44 +5,7 @@ import { apiGetAllTasks } from "../api/Tasks/getAllTasks";
 
 export const useTasksStore = defineStore('tasks', {
     state: () => ({
-        tasks: [
-            new TaskboardTaskModel(
-                "test task"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-            new TaskboardTaskModel(
-                "test task 2"
-            ),
-        ] as TaskboardTaskModel[]
+        tasks: [] as TaskboardTaskModel[]
     }),
     actions: {
         addTask(newTask: TaskboardTaskModel) {
