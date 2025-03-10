@@ -40,24 +40,28 @@ const tasksStore = useTasksStore();
           v-for="task in tasksStore.tasks"
         >
           <input :value="task.name" />
+
           <input
             type="number"
             :value="task.expectedDurationMinutes"
             min="0"
             step="15"
           />
+
           <input
             type="number"
             :value="task.importance || ''"
             min="0"
             max="10"
           />
+
           <input
             type="number"
             :value="task.intensity || ''"
             min="0"
             max="10"
           />
+
           <button @click="removeTask(task as TaskboardTaskModel)">
             Delete
           </button>
