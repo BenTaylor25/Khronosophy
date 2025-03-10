@@ -1,5 +1,6 @@
-import { API_CALENDAR_EVENT_ROUTE } from "../../constants/api.ts";
 import { CalendarEventModel } from "../../models/CalendarEventModel.ts";
+import { apiGetDefaultUserId } from "../Users/getDefaultUserId.ts";
+import { API_CALENDAR_EVENTS_ROUTE } from "../../constants/api.ts";
 
 interface ApiEventResponse {
     id: string,
@@ -11,9 +12,20 @@ interface ApiEventResponse {
 export async function apiGetAllCalendarEvents():
     Promise<CalendarEventModel[]>
 {
+    const userId = await apiGetDefaultUserId();
+
+    //#region Error Handling
+    if (userId === '') {
+        console.error("Couldn't get default user.");
+        return [];
+    }
+    //#endregion
+
+    const route = `${API_CALENDAR_EVENTS_ROUTE}/${userId}`;
+
     const eventsFromApi = [] as CalendarEventModel[];
 
-    await fetch(API_CALENDAR_EVENT_ROUTE)
+    await fetch(route)
         .then(res => {
             return res.json();
         })

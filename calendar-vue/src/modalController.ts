@@ -78,3 +78,12 @@ export const showYearViewModal = () => {
 export const hideYearViewModal = () => {
     hideElementWithId(MODAL_IDS.YEAR_VIEW_MODAL);
 }
+
+// Tasks View.
+export const showTasksModal = () => {
+    showElementWithId(MODAL_IDS.TASKS_MODAL);
+}
+
+export const hideTasksModal = () => {
+    hideElementWithId(MODAL_IDS.TASKS_MODAL);
+}

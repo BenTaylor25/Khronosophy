@@ -1,6 +1,8 @@
 import { API_CALENDAR_EVENT_ROUTE, JSON_HEADERS, NOT_SYNCED } from "../../constants/api.ts";
 import { CalendarEventModel } from "../../models/CalendarEventModel.ts";
 
+// THIS IS STILL USING THE OLD API SO IT WILL NOT WORK PROPERLY.
+
 interface UpdateBody {
     name: string,
     startDateTime: string,
