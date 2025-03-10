@@ -212,7 +212,7 @@ function removeTask(task: TaskboardTaskModel) {
   }
 
   #existing-tasks {
-    height: 50%;
+    height: 45%;
     overflow-y: auto;
   }
 
