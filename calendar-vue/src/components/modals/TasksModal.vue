@@ -27,6 +27,7 @@ const tasksStore = useTasksStore();
       <!-- Tasks Header -->
        <div id="task-header" class="task">
           <p>Task Name</p>
+          <p>Expected Duration (minutes)</p>
           <p>Importance</p>
           <p>Intensity</p>
           <p>Delete</p>
@@ -39,6 +40,12 @@ const tasksStore = useTasksStore();
           v-for="task in tasksStore.tasks"
         >
           <input :value="task.name" />
+          <input
+            type="number"
+            :value="task.expectedDurationMinutes"
+            min="0"
+            step="15"
+          />
           <input
             type="number"
             :value="task.importance || ''"
@@ -72,6 +79,14 @@ const tasksStore = useTasksStore();
         />
 
         <input
+          id="new-task-expected-duration"
+          type="number"
+          v-model="newTaskExpectedDuration"
+          min="0"
+          step="15"
+        />
+
+        <input
           id="new-task-importance"
           type="number"
           v-model="newTaskImportance"
@@ -101,6 +116,7 @@ const tasksStore = useTasksStore();
 const errorMessage = ref('');
 
 const newTaskName = ref('');
+const newTaskExpectedDuration = ref(0);
 const newTaskImportance = ref(0);
 const newTaskIntensity = ref(0);
 
@@ -109,7 +125,8 @@ async function createNewTask() {
     const tasksStore = useTasksStore();
 
     const newTask = new TaskboardTaskModel(
-      newTaskName.value
+      newTaskName.value,
+      newTaskExpectedDuration.value
     );
     newTask.importance = newTaskImportance.value;
     newTask.intensity = newTaskIntensity.value;
@@ -129,6 +146,8 @@ async function createNewTask() {
 
 function newTaskIsValid(): boolean {
   const isValid = newTaskName.value.length > 0 &&
+    newTaskExpectedDuration.value > 0 &&
+    newTaskExpectedDuration.value % 15 == 0 &&
     newTaskImportance.value >= 0 &&
     newTaskImportance.value <= 10 &&
     newTaskIntensity.value >= 0 &&
@@ -193,7 +212,7 @@ function removeTask(task: TaskboardTaskModel) {
   }
 
   #existing-tasks {
-    height: 55%;
+    height: 50%;
     overflow-y: auto;
   }
 
