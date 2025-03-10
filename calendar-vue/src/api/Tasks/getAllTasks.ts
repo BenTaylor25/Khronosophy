@@ -1,5 +1,6 @@
 import { TaskboardTaskModel } from "../../models/TaskboardTaskModel";
 import { apiGetDefaultUserId } from "../Users/getDefaultUserId";
+import { timeSpanStringToMinutes } from "../../helpers/timeSpan";
 import { API_TASK_ROUTE } from "../../constants/api";
 
 interface ApiTaskResponse {
@@ -29,10 +30,9 @@ export async function apiGetAllTasks(): Promise<TaskboardTaskModel[]> {
         })
         .then(body => {
             for (const apiTask of body as ApiTaskResponse[]) {
-                const expectedDurationMinutes = 0;
-                // const expectedDurationMinutes = timeSpanStringToMinutes(
-                //     apiTask.expectedDuration
-                // );
+                const expectedDurationMinutes = timeSpanStringToMinutes(
+                    apiTask.expectedDuration
+                );
 
                 const taskFromApi = new TaskboardTaskModel(
                     apiTask.name,
