@@ -2,12 +2,14 @@
 export class TaskboardTaskModel {
     private _serverId: string;
     private _name: string;
+    private _expectedDurationMinutes: number;
     private _importance: number | null;
     private _intensity: number | null;
 
-    constructor(name: string) {
+    constructor(name: string, expectedDurationMinutes: number) {
         this._serverId = "";
         this._name = name;
+        this._expectedDurationMinutes = expectedDurationMinutes
         this._importance = null;
         this._intensity = null;
     }
@@ -21,6 +23,13 @@ export class TaskboardTaskModel {
     }
     set name(newName: string) {
         this._name = newName;
+    }
+
+    get expectedDurationMinutes(): number {
+        return this._expectedDurationMinutes;
+    }
+    set expectedDurationMinutes(newExpectedDurationMinutes: number) {
+        this._expectedDurationMinutes = newExpectedDurationMinutes;
     }
 
     get importance(): number | null {

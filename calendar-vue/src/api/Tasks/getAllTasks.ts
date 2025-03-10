@@ -29,8 +29,15 @@ export async function apiGetAllTasks(): Promise<TaskboardTaskModel[]> {
         })
         .then(body => {
             for (const apiTask of body as ApiTaskResponse[]) {
-                const taskFromApi = new TaskboardTaskModel(apiTask.name);
-                // expected duration
+                const expectedDurationMinutes = 0;
+                // const expectedDurationMinutes = timeSpanStringToMinutes(
+                //     apiTask.expectedDuration
+                // );
+
+                const taskFromApi = new TaskboardTaskModel(
+                    apiTask.name,
+                    expectedDurationMinutes
+                );
                 taskFromApi.importance = apiTask.importance;
                 taskFromApi.intensity = apiTask.intensity;
 

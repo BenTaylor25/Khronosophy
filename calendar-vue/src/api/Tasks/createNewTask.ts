@@ -30,14 +30,12 @@ export async function apiCreateNewTask(
     }
     //#endregion
 
-    const expectedDurationMinutes = 0; // Oops, forgot about that...
-
     let success = false;
 
     const body = {
         userId,
         name: task.name,
-        expectedDurationMinutes,
+        expectedDurationMinutes: task.expectedDurationMinutes,
         importance: task.importance,
         intensity: task.intensity
     } as CreateBody;
