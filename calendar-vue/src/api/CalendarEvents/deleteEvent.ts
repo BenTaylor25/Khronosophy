@@ -1,6 +1,8 @@
 import { API_CALENDAR_EVENT_ROUTE, NOT_SYNCED } from "../../constants/api.ts";
 import { CalendarEventModel } from "../../models/CalendarEventModel.ts";
 
+// THIS IS STILL USING THE OLD API SO IT WILL NOT WORK PROPERLY.
+
 export async function apiDeleteEvent(calendarEvent: CalendarEventModel) {
     //#region Error Handling
     if (calendarEvent === null || calendarEvent.serverId === NOT_SYNCED) {
