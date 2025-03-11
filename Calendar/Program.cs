@@ -1,7 +1,10 @@
-using Calendar.Constants;
 using Calendar.Services.UserService;
 using Calendar.Services.EventService;
 using Calendar.Services.TaskboardService;
+using Calendar.Services.SchedulingService.DumbScheduler;
+using Calendar.Services.SchedulingService.ETF;
+using Calendar.Services.SchedulingService.UTMTK;
+using Calendar.Constants;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
@@ -12,7 +15,10 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     builder.Services
         .AddSingleton<IUserService, UserService>()
         .AddSingleton<IEventService, EventService>()
-        .AddSingleton<ITaskboardService, TaskboardService>();
+        .AddSingleton<ITaskboardService, TaskboardService>()
+        .AddSingleton<IDumbSchedulerService, DumbSchedulerService>()
+        .AddSingleton<IETFService, ETFService>()
+        .AddSingleton<IUTMTKService, UTMTKService>();
 
     builder.Services.Configure<IISServerOptions>(options =>
     {
