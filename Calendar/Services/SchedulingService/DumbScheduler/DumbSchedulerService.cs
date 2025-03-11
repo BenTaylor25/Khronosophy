@@ -1,6 +1,6 @@
+using ErrorOr;
 
 using Calendar.Models;
-using ErrorOr;
 
 namespace Calendar.Services.SchedulingService.DumbScheduler;
 
