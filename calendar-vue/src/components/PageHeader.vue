@@ -2,7 +2,8 @@
 import {
   showZoomSettingsModal,
   showYearViewModal,
-  showTasksModal
+  showTasksModal,
+  showScheduleModal
 } from '../modalController.ts';
 import { useDateStore } from '../stores/DateStore.ts';
 
@@ -39,6 +40,13 @@ const dateStore = useDateStore();
         <p>Tasks</p>
       </div>
 
+      <div
+        id="schedule"
+        @click="showScheduleModal()"
+      >
+        <p>Schedule</p>
+      </div>
+
     </div>
 
     <div id="settings">
@@ -62,9 +70,8 @@ const dateStore = useDateStore();
   align-items: center;
   justify-content: space-between;
 
-  #controls {
+  #controls, #central, #settings {
     display: flex;
-    margin-left: 1rem;
 
     * {
       height: 50%;
@@ -75,24 +82,12 @@ const dateStore = useDateStore();
     }
   }
 
-  #central {
-    * {
-      background: green;
-      padding: 0.1rem 0.3rem;
-      cursor: pointer;
-    }
+  #controls {
+    margin-left: 1rem;
   }
 
   #settings {
     margin-right: 1rem;
-
-    * {
-      height: 50%;
-      background: green;
-      padding: 0.1rem 0.3rem;
-      cursor: pointer;
-    }
-
   }
 }
 

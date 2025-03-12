@@ -87,3 +87,12 @@ export const showTasksModal = () => {
 export const hideTasksModal = () => {
     hideElementWithId(MODAL_IDS.TASKS_MODAL);
 }
+
+// Schedule View.
+export const showScheduleModal = () => {
+    showElementWithId(MODAL_IDS.SCHEDULE_MODAL);
+}
+
+export const hideScheduleModal = () => {
+    hideElementWithId(MODAL_IDS.SCHEDULE_MODAL);
+}
