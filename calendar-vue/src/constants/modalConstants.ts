@@ -4,5 +4,6 @@ export const MODAL_IDS = {
     NEW_EVENT_MODAL: "new-event-modal",
     EDIT_EVENT_MODAL: "edit-event-modal",
     YEAR_VIEW_MODAL: "year-view-modal",
-    TASKS_MODAL: "tasks-modal"
+    TASKS_MODAL: "tasks-modal",
+    SCHEDULE_MODAL: "schedule-modal"
 }

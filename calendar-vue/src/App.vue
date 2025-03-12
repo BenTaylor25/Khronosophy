@@ -7,6 +7,7 @@ import NewEventModal from './components/modals/NewEventModal.vue';
 import EditEventModal from './components/modals/EditEventModal.vue';
 import YearViewModal from './components/modals/YearViewModal.vue';
 import TasksModal from './components/modals/TasksModal.vue';
+import ScheduleModal from './components/modals/ScheduleModal.vue';
 </script>
 
 <template>
@@ -25,6 +26,7 @@ import TasksModal from './components/modals/TasksModal.vue';
   <edit-event-modal />
   <year-view-modal />
   <tasks-modal />
+  <schedule-modal />
 
 </template>
 
