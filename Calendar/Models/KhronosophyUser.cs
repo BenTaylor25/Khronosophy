@@ -10,6 +10,10 @@ public class KhronosophyUser
     public EventCalendar EventCalendar { get; set; } = new();
 
     public int? DailyIntensityCapacity { get; set; }
+    public TimeOnly? DayStart { get; set; }
+    public TimeOnly? DayEnd { get; set; }
+    public int? MinimumEventDurationMinutes { get; set; }
+
 
     private KhronosophyUser(Guid id, int? dailyIntensityCapacity = null)
     {
