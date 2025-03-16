@@ -13,7 +13,7 @@ public class UTMTKService : IUTMTKService
 
         if (validation.IsError)
         {
-            return validation.Errors;
+            return validation;
         }
 
         List<TaskboardTask> tasksByImportance =
@@ -25,7 +25,7 @@ public class UTMTKService : IUTMTKService
 
         while (CalendarHelpers.ShouldScheduleTasks(tasksByImportance))
         {
-
+            ScheduleEventsForDay(user, tasksByImportance, dateToSchedule);
 
             dateToSchedule.AddDays(1);
         }
@@ -33,7 +33,45 @@ public class UTMTKService : IUTMTKService
         return new Success();
     }
 
-    private static ErrorOr<Success> ParameterValidation(
+    /// <summary>
+    /// If ParameterValidation(user) does not return Success before this
+    /// method is called (or if there is a semantic error in
+    /// ParameterValidation(user)), this method may fail an assertion
+    /// and crash the program.
+    /// </summary>
+    private void ScheduleEventsForDay(
+        KhronosophyUser user,
+        List<TaskboardTask> tasksByImportance,
+        DateOnly date
+    )
+    {
+
+        TimeOnly nextEventStart = user.DayStart!.Value;
+
+
+    }
+
+    private TimeOnly GetNextEventStart(
+        DateOnly date,
+        TimeOnly dayStart,
+        TimeOnly dayEnd,
+        TimeSpan minimumEventDuration
+        // previous task?
+    )
+    {
+        TimeOnly nextEventStart = dayStart;
+
+        DateTime now = DateTime.UtcNow;
+        DateOnly dateNow = DateOnly.FromDateTime(now);
+        TimeOnly timeNow = TimeOnly.FromDateTime(now);
+
+        if (date == dateNow && timeNow > nextEventStart)
+        {
+            
+        }
+    }
+
+    private ErrorOr<Success> ParameterValidation(
         KhronosophyUser user
     )
     {
