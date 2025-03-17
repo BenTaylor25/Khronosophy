@@ -13,9 +13,12 @@ foreach (var task in user.Taskboard.Tasks)
 Console.WriteLine();
 Console.WriteLine("---");
 
-UTMTKSettings settings = new(3, 2, 1, 10, 5, 2);
+// UTMTKSettings settings = new(3, 2, 1, 10, 5, 2);
 
-IScheduler scheduler = new UTMTKScheduler(settings);
+// IScheduler scheduler = new UTMTKScheduler(settings);
+// scheduler.ScheduleUsersTasks(user);
+
+IScheduler scheduler = new ETFScheduler();
 scheduler.ScheduleUsersTasks(user);
 
 user.Calendar.Print();
