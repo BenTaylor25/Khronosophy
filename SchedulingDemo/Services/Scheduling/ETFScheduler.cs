@@ -11,6 +11,10 @@ public class ETFScheduler : IScheduler
 
     private readonly double WORK_LEISURE_RATIO = 0.667;
 
+    private readonly TimeSpan MINIMIUM_EVENT_LENGTH = new(1, 0, 0);
+
+    private readonly TimeSpan BREAK_DURATION = new(0, 15, 0);
+
     /// <summary>
     /// ETF Philosophy:
     /// Work hard early, enjoy the evening. <br />
@@ -45,6 +49,64 @@ public class ETFScheduler : IScheduler
         );
 
         TimeOnly workCutoffTime = DAY_START.Add(workDuration);
+
+        DateTime nextEventStart = new DateTime(
+            DateTime.UtcNow.Year,
+            DateTime.UtcNow.Month,
+            DateTime.UtcNow.Day,
+            DAY_START.Hour,
+            DAY_START.Minute,
+            DAY_START.Second
+        )
+            .AddDays(1);
+
+        TimeSpan timeUntilEndOfWorkingDay =
+            workCutoffTime - TimeOnly.FromDateTime(nextEventStart);
+
+        foreach (TaskboardTask taskboardTask in tasksByImportance)
+        {
+            if (timeUntilEndOfWorkingDay >= MINIMIUM_EVENT_LENGTH)
+            {
+                TimeSpan taskRemainingDuration =
+                    RemainingDuration(taskboardTask);
+
+                // Min(taskRemainingDuration, timeUntilEndOfWorkingDay);
+                TimeSpan eventDuration =
+                    taskRemainingDuration > timeUntilEndOfWorkingDay ?
+                    timeUntilEndOfWorkingDay : taskRemainingDuration;
+
+                ScheduledEvent scheduledEvent = new(
+                    taskboardTask.Name,
+                    nextEventStart,
+                    nextEventStart + eventDuration,
+                    taskboardTask
+                );
+
+                taskboardTask.Events.Add(scheduledEvent);
+                user.Calendar.Events.Add(scheduledEvent);
+
+                nextEventStart =
+                    scheduledEvent.EndDateTime + BREAK_DURATION;
+                timeUntilEndOfWorkingDay -= eventDuration + BREAK_DURATION;
+            }
+        }
+    }
+
+    private TimeSpan RemainingDuration(TaskboardTask task)
+    {
+        TimeSpan remainingDuration = task.ExpectedDuration;
+
+        foreach (ScheduledEvent scheduledEvent in task.Events)
+        {
+            remainingDuration -= scheduledEvent.Duration;
+        }
+
+        if (remainingDuration < TimeSpan.Zero)
+        {
+            remainingDuration = TimeSpan.Zero;
+        }
+
+        return remainingDuration;
     }
 
     private bool AreParametersValid(User user)
