@@ -46,12 +46,11 @@ public class UTMTKService : IUTMTKService
     )
     {
 
-        // TimeOnly nextEventStart = user.DayStart!.Value;
-        TimeOnly nextEventStart = GetNextEventStart(
+        TimeOnly? nextEventStart = GetNextEventStart(
             date,
-            user.DayStart,
-            user.DayEnd,
-            // user.MinimumEventDurationMinutes
+            user.DayStart!.Value,
+            user.DayEnd!.Value,
+            TimeSpan.FromMinutes(user.MinimumEventDurationMinutes!.Value)
         );
 
 
