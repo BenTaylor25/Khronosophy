@@ -46,29 +46,79 @@ public class UTMTKService : IUTMTKService
     )
     {
 
-        TimeOnly nextEventStart = user.DayStart!.Value;
+        // TimeOnly nextEventStart = user.DayStart!.Value;
+        TimeOnly nextEventStart = GetNextEventStart(
+            date,
+            user.DayStart,
+            user.DayEnd,
+            // user.MinimumEventDurationMinutes
+        );
 
 
     }
 
-    private TimeOnly GetNextEventStart(
+    private TimeOnly? GetNextEventStart(
         DateOnly date,
         TimeOnly dayStart,
         TimeOnly dayEnd,
         TimeSpan minimumEventDuration
-        // previous task?
+        // previousTask
     )
     {
+        // We want to restrict this function to a specified date.
+        // This variable keeps track of if we've crossed into
+        // the next date.
+        int _wrappedDays;
+
         TimeOnly nextEventStart = dayStart;
 
         DateTime now = DateTime.UtcNow;
         DateOnly dateNow = DateOnly.FromDateTime(now);
         TimeOnly timeNow = TimeOnly.FromDateTime(now);
 
+        // If we're scheduling for today and we're already
+        // past dayStart, we'll be scheduling for the past.
+        // Correct this by shifting the nextEventStart to
+        // the next whole hour.
         if (date == dateNow && timeNow > nextEventStart)
         {
-            
+            nextEventStart = new TimeOnly(
+                timeNow.Hour,
+                0,
+                0
+            )
+                .AddHours(1, out _wrappedDays);
+
+            #region Error Handling
+            if (_wrappedDays != 0)
+            {
+                return null;
+            }
+            #endregion
         }
+
+        // When scheduling more than one event, all will be given
+        // the same nextEventStart unless we offset them from the
+        // the previous.
+        if (false)
+        {
+
+        }
+
+        // If there is not enough time in the day to satisfy the
+        // minimum event time, return null.
+        if (
+            nextEventStart.Add(
+                minimumEventDuration,
+                out _wrappedDays
+            ) > dayEnd ||
+            _wrappedDays != 0
+        )
+        {
+            return null;
+        }
+
+        return nextEventStart;
     }
 
     private ErrorOr<Success> ParameterValidation(
