@@ -1,4 +1,6 @@
 
+using Calendar.Models.Events;
+
 namespace Calendar.Constants;
 
 public static class UTMTKConstants
@@ -14,4 +16,8 @@ public static class UTMTKConstants
 
     public const int MIN_TASK_INTENSITY = 1;
     public const int MAX_TASK_INTENSITY = 10;
+
+    public const int BREAK_DURATION = 1;
+    public static readonly EventRequest EVENT_REQUEST_BREAK =
+        new(null, TimeSpan.FromHours(BREAK_DURATION));
 }

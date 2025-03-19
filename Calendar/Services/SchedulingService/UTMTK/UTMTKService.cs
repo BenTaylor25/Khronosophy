@@ -2,6 +2,7 @@ using ErrorOr;
 
 using Calendar.Models;
 using Calendar.Constants;
+using Calendar.Models.Events;
 
 namespace Calendar.Services.SchedulingService.UTMTK;
 
@@ -45,7 +46,6 @@ public class UTMTKService : IUTMTKService
         DateOnly date
     )
     {
-
         TimeOnly? nextEventStart = GetNextEventStart(
             date,
             user.DayStart!.Value,
@@ -53,7 +53,198 @@ public class UTMTKService : IUTMTKService
             TimeSpan.FromMinutes(user.MinimumEventDurationMinutes!.Value)
         );
 
+        if (nextEventStart == null)
+        {
+            return;
+        }
 
+        TimeSpan timentilEndOfDay =
+            user.DayEnd!.Value - nextEventStart!.Value;
+        double hoursUntilEndOfDay =
+            15 * Math.Floor(timentilEndOfDay.TotalHours / 15);
+
+        List<EventRequest> tasksForToday =
+            SelectTasksForDay(user, tasksByImportance, hoursUntilEndOfDay);
+
+        List<EventRequest> tasksForTodayByIntensity =
+            tasksForToday
+                .OrderByDescending(task => task.ParentTask?.Intensity ?? 0)
+                .ToList();
+        // Todo: Restrict adjacent tasks to combined intensity <15.
+
+        PushTimeBlocks(
+            user,
+            tasksForTodayByIntensity,
+            date,
+            nextEventStart!.Value
+        );
+    }
+
+    private List<EventRequest> SelectTasksForDay(
+        KhronosophyUser user,
+        List<TaskboardTask> tasksByImportance,
+        double unscheduledHoursUntilEndOfDay
+    )
+    {
+        List<EventRequest> tasksForDay = [];
+
+        bool eventAddedThisIteration;
+
+        do
+        {
+            eventAddedThisIteration = false;
+
+            foreach (TaskboardTask taskboardTask in tasksByImportance)
+            {
+                double averageIntensity = AverageIntensity(tasksForDay);
+
+                // Maximum sum of average and next intensity.
+                const double MAGIC_NUMBER = 14;
+
+                bool isIntensityInRange =
+                    taskboardTask.Intensity + averageIntensity <=
+                        MAGIC_NUMBER;
+
+                bool isTimeRemaining =
+                    unscheduledHoursUntilEndOfDay * 60 >
+                        user.MinimumEventDurationMinutes;
+
+                if (isIntensityInRange && isTimeRemaining)
+                {
+                    // TODO: Check that task needs to be scheduled more time.
+
+                    TimeSpan duration = GetDurationForEventRequest(
+                        taskboardTask,
+                        unscheduledHoursUntilEndOfDay
+                    );
+
+                    tasksForDay.Add(
+                        new EventRequest(taskboardTask, duration)
+                    );
+
+                    unscheduledHoursUntilEndOfDay -=
+                        15 * Math.Ceiling(duration.TotalHours);
+                    
+                    eventAddedThisIteration = true;
+                }
+            }
+
+            bool isTimeRemainingToSchedule =
+                unscheduledHoursUntilEndOfDay * 60 > user.MinimumEventDurationMinutes;
+
+            if (
+                !eventAddedThisIteration &&
+                isTimeRemainingToSchedule
+                // TODO: Check that there is time to be scheduled in taskboard.
+            )
+            {
+                tasksForDay.Add(UTMTKConstants.EVENT_REQUEST_BREAK);
+                unscheduledHoursUntilEndOfDay -=
+                    UTMTKConstants.BREAK_DURATION;
+                eventAddedThisIteration = true;
+            }
+        }
+        while(eventAddedThisIteration);
+
+        return tasksForDay;
+    }
+
+    private static double AverageIntensity(
+        List<EventRequest> eventRequests
+    )
+    {
+        if (eventRequests.Count == 0)
+        {
+            return 0;
+        }
+
+        double totalIntensity = 0;
+
+        foreach (EventRequest eventRequest in eventRequests)
+        {
+            totalIntensity += eventRequest.ParentTask?.Intensity ?? 0;
+        }
+
+        double averageIntensity = totalIntensity / eventRequests.Count;
+        return averageIntensity;
+    }
+
+    private void PushTimeBlocks(
+        KhronosophyUser user,
+        List<EventRequest> eventRequests,
+        DateOnly date,
+        TimeOnly nextEventStart
+    )
+    {
+        // Handle explicit time breaks.
+
+        foreach (EventRequest eventRequest in eventRequests)
+        {
+            if (
+                eventRequest.ParentTask is TaskboardTask parentTask &&
+                parentTask.Intensity is double intensity
+            )
+            {
+                DateTime startDateTime = new(date, nextEventStart);
+
+                ScheduledEvent scheduledEvent = new(
+                    parentTask.Name,
+                    startDateTime,
+                    startDateTime + eventRequest.Duration,
+                    parentTask
+                );
+
+                parentTask.Events.Add(scheduledEvent);
+                user.EventCalendar.Events.Add(scheduledEvent);
+
+                double breakDurationHours =
+                    eventRequest.Duration.TotalHours * intensity / 20;
+                double breakDurationHoursRounded =
+                    15 * Math.Ceiling(breakDurationHours / 15);
+                TimeSpan breakDuration =
+                    TimeSpan.FromHours(breakDurationHoursRounded);
+
+                nextEventStart =
+                    TimeOnly.FromDateTime(scheduledEvent.EndDateTime)
+                        .Add(breakDuration, out int _wrappedDays);
+
+                if (_wrappedDays != 0)
+                {
+                    Console.WriteLine("Error");
+                }
+            }
+        }
+    }
+
+    private TimeSpan GetDurationForEventRequest(
+        TaskboardTask taskboardTask,
+        double unscheduledHoursUntilEndOfDay
+    )
+    {
+        if (taskboardTask.Intensity is double intensity)
+        {
+            // Linear interpolation of:
+            // intensity  0 --> 4 hours
+            // intensity 10 --> 1 hour
+            double maxTaskTimeHours = 4 - (3 * intensity / 10);
+
+            // Round up to the next 15 minutes.
+            double maxTaskTimeHoursQuarterHourIncrement =
+                Math.Ceiling(4 * maxTaskTimeHours) / 4;
+
+            // double remainingTaskDurationToScheduleHours = something on task
+
+            double durationHours = Math.Min(
+                maxTaskTimeHoursQuarterHourIncrement,
+                unscheduledHoursUntilEndOfDay
+                // task duration to schedule
+            );
+
+            return TimeSpan.FromHours(durationHours);
+        }
+
+        // TODO: handle better?
+        return TimeSpan.FromHours(0);
     }
 
     private TimeOnly? GetNextEventStart(
