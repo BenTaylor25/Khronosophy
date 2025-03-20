@@ -6,6 +6,7 @@ namespace Calendar.Models;
 
 public class TaskboardTask
 {
+    public Guid Id { get; }
     public string Name { get; set; }
     public TimeSpan ExpectedDuration { get; set; }
 
@@ -21,6 +22,7 @@ public class TaskboardTask
         double? intensity = null
     )
     {
+        Id = Guid.NewGuid();
         Name = name;
         ExpectedDuration = expectedDuration;
         Importance = importance;

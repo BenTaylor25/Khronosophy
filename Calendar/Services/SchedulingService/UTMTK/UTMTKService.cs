@@ -198,7 +198,7 @@ public class UTMTKService : IUTMTKService
                     parentTask.Name,
                     startDateTime,
                     startDateTime + eventRequest.Duration,
-                    parentTask
+                    parentTask.Id
                 );
 
                 parentTask.Events.Add(scheduledEvent);
