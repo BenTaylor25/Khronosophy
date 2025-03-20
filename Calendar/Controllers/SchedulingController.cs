@@ -91,7 +91,14 @@ public class SchedulingController : AppBaseController
 
         if (utmtkServiceResponse.IsError)
         {
-            return Problem();
+            string errorMessage = "UTMTK Service Failed: ";
+
+            foreach (Error error in utmtkServiceResponse.Errors)
+            {
+                errorMessage += error.Description;
+            }
+
+            return Problem(errorMessage);
         }
         return Ok();
     }
