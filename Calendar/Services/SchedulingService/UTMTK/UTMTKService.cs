@@ -16,7 +16,6 @@ public class UTMTKService : IUTMTKService
         {
             return validation.Errors;
         }
-        Console.WriteLine("passed validation");
 
         List<TaskboardTask> tasksByImportance =
             user.Taskboard.Tasks

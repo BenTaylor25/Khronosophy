@@ -9,9 +9,10 @@ using Calendar.Constants;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddControllers();
+    builder.Services
+        .AddEndpointsApiExplorer()
+        .AddSwaggerGen()
+        .AddControllers();
 
     builder.Services
         .AddSingleton<IUserService, UserService>()
@@ -26,6 +27,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
     {
         options.MaxRequestBodySize = Constants.API_REQUEST_MAX_BODY_SIZE;
     });
+
     builder.Services.AddCors(setup => {
         setup.AddDefaultPolicy(policyBuilder => {
             policyBuilder
