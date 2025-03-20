@@ -60,10 +60,10 @@ public class UTMTKService : IUTMTKService
             return;
         }
 
-        TimeSpan timentilEndOfDay =
+        TimeSpan timeUntilEndOfDay =
             user.DayEnd!.Value - nextEventStart!.Value;
         double hoursUntilEndOfDay =
-            15 * Math.Floor(timentilEndOfDay.TotalMinutes / 15) / 60;
+            15 * Math.Floor(timeUntilEndOfDay.TotalMinutes / 15) / 60;
 
         List<EventRequest> tasksForToday =
             SelectTasksForDay(user, tasksByImportance, hoursUntilEndOfDay);
@@ -130,7 +130,7 @@ public class UTMTKService : IUTMTKService
                     );
 
                     unscheduledHoursUntilEndOfDay -=
-                        15 * Math.Ceiling(duration.TotalHours);
+                        15f * Math.Ceiling(duration.TotalMinutes / 15) / 60;
                     
                     eventAddedThisIteration = true;
                 }
@@ -138,6 +138,7 @@ public class UTMTKService : IUTMTKService
 
             bool isTimeRemainingToSchedule =
                 unscheduledHoursUntilEndOfDay * 60 > user.MinimumEventDurationMinutes;
+            // Console.WriteLine(unscheduledHoursUntilEndOfDay);
 
             if (
                 !eventAddedThisIteration &&
