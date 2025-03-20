@@ -1,6 +1,7 @@
 using Calendar.Services.UserService;
 using Calendar.Services.EventService;
 using Calendar.Services.TaskboardService;
+using Calendar.Services.SampleDataService;
 using Calendar.Services.SchedulingService.DumbScheduler;
 using Calendar.Services.SchedulingService.ETF;
 using Calendar.Services.SchedulingService.UTMTK;
@@ -16,6 +17,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
         .AddSingleton<IUserService, UserService>()
         .AddSingleton<IEventService, EventService>()
         .AddSingleton<ITaskboardService, TaskboardService>()
+        .AddSingleton<ISampleDataService, SampleDataService>()
         .AddSingleton<IDumbSchedulerService, DumbSchedulerService>()
         .AddSingleton<IETFService, ETFService>()
         .AddSingleton<IUTMTKService, UTMTKService>();

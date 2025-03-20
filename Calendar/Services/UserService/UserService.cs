@@ -39,4 +39,11 @@ public class UserService : IUserService
         Users.Add(user.Id, user);
         return Result.Updated;
     }
+
+    public ErrorOr<Deleted> ClearAllUsers()
+    {
+        // The GC will clean the objects up right?
+        Users = [];
+        return Result.Deleted;
+    }
 }

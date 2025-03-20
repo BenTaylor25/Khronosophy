@@ -9,4 +9,5 @@ public interface IUserService
     ErrorOr<Guid> GetDefaultUserGuid();
     ErrorOr<KhronosophyUser> GetUser(Guid userId);
     ErrorOr<Updated> AddUser(KhronosophyUser user);
+    ErrorOr<Deleted> ClearAllUsers();
 }
