@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { MODAL_IDS } from '../../constants/modalConstants.ts';
 import { hideScheduleModal} from '../../modalController.ts';
+import { apiUTMTKSchedule } from '../../api/Scheduling/UTMTKSchedule.ts';
 
 import ModalShadow from './ModalShadow.vue';
 </script>
@@ -40,6 +41,7 @@ import ModalShadow from './ModalShadow.vue';
 
         <button
           id="utmtk-scheduler"
+          @click="apiUTMTKSchedule"
         >
           UTMTK Scheduler
         </button>
