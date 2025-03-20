@@ -24,6 +24,11 @@ public static class SampleDataConstants
         return taskOrError.Value;
     }
 
+    public static readonly TimeOnly DAY_START = new(8, 0, 0);
+    public static readonly TimeOnly DAY_END = new(20, 0, 0);
+    public const int MAX_DAILY_INTENSITY_CAPACITY = 20;
+    public const int MINIMUM_EVENT_DURATION_MINUTES = 60;
+
     public static readonly TaskboardTask[] TASKS_WITH_INTENSITIES = [
         CreateTask("test 1", TimeSpan.FromHours(3), 3, 8),
         CreateTask("test 2", TimeSpan.FromHours(4), 2, 7),

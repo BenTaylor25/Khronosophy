@@ -14,8 +14,9 @@ public class UTMTKService : IUTMTKService
 
         if (validation.IsError)
         {
-            return validation;
+            return validation.Errors;
         }
+        Console.WriteLine("passed validation");
 
         List<TaskboardTask> tasksByImportance =
             user.Taskboard.Tasks
@@ -26,9 +27,11 @@ public class UTMTKService : IUTMTKService
 
         while (CalendarHelpers.ShouldScheduleTasks(tasksByImportance))
         {
+            // Console.WriteLine($"scheduling for {dateToSchedule}");
+
             ScheduleEventsForDay(user, tasksByImportance, dateToSchedule);
 
-            dateToSchedule.AddDays(1);
+            dateToSchedule = dateToSchedule.AddDays(1);
         }
 
         return new Success();
@@ -61,7 +64,7 @@ public class UTMTKService : IUTMTKService
         TimeSpan timentilEndOfDay =
             user.DayEnd!.Value - nextEventStart!.Value;
         double hoursUntilEndOfDay =
-            15 * Math.Floor(timentilEndOfDay.TotalHours / 15);
+            15 * Math.Floor(timentilEndOfDay.TotalMinutes / 15) / 60;
 
         List<EventRequest> tasksForToday =
             SelectTasksForDay(user, tasksByImportance, hoursUntilEndOfDay);
@@ -109,10 +112,15 @@ public class UTMTKService : IUTMTKService
                     unscheduledHoursUntilEndOfDay * 60 >
                         user.MinimumEventDurationMinutes;
 
-                if (isIntensityInRange && isTimeRemaining)
-                {
-                    // TODO: Check that task needs to be scheduled more time.
+                bool taskNeedsMoreEvents =
+                    CalendarHelpers.ShouldScheduleTask(taskboardTask);
 
+                if (
+                    isIntensityInRange &&
+                    isTimeRemaining &&
+                    taskNeedsMoreEvents
+                )
+                {
                     TimeSpan duration = GetDurationForEventRequest(
                         taskboardTask,
                         unscheduledHoursUntilEndOfDay
@@ -210,7 +218,9 @@ public class UTMTKService : IUTMTKService
 
                 if (_wrappedDays != 0)
                 {
-                    Console.WriteLine("Error");
+                    // Console.WriteLine(
+                    //     "No further events can be scheduled today."
+                    // );
                 }
             }
         }
@@ -331,11 +341,11 @@ public class UTMTKService : IUTMTKService
                 UTMTKConstants.MAX_DAILY_INTENSITY_CAPACITY ||
             // day start divisible by 15 mins
             // day end divisible by 15 mins
-            user.DayStart < user.DayEnd ||
-            user.MinimumEventDurationMinutes < 0 ||
+            user.DayStart >= user.DayEnd ||
+            user.MinimumEventDurationMinutes <= 0 ||
             user.MinimumEventDurationMinutes >
                 UTMTKConstants.MAX_MINIMUM_EVENT_DURATION_MINUTES ||
-            user.MinimumEventDurationMinutes % 15 == 0
+            user.MinimumEventDurationMinutes % 15 != 0
         )
         {
             return Error.Validation("User settings invalid");
@@ -355,7 +365,7 @@ public class UTMTKService : IUTMTKService
                 taskboardTask.Importance <
                     UTMTKConstants.MIN_TASK_IMPORTANCE ||
                 taskboardTask.Importance >
-                    UTMTKConstants.MIN_TASK_IMPORTANCE ||
+                    UTMTKConstants.MAX_TASK_IMPORTANCE ||
                 taskboardTask.Intensity <
                     UTMTKConstants.MIN_TASK_INTENSITY ||
                 taskboardTask.Intensity >

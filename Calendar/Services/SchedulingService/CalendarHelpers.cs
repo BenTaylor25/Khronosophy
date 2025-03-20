@@ -15,23 +15,28 @@ public static class CalendarHelpers
     {
         foreach (TaskboardTask taskboardTask in tasks)
         {
-            double expectedTimeMinutes =
-                taskboardTask.ExpectedDuration.TotalMinutes;
-
-            double scheduledTimeMinutes = 0;
-
-            foreach (ScheduledEvent scheduledEvent in taskboardTask.Events)
-            {
-                scheduledTimeMinutes +=
-                    scheduledEvent.Duration.TotalMinutes;
-            }
-
-            if (scheduledTimeMinutes < expectedTimeMinutes)
+            if (ShouldScheduleTask(taskboardTask))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public static bool ShouldScheduleTask(TaskboardTask taskboardTask)
+    {
+        double expectedTimeMinutes =
+            taskboardTask.ExpectedDuration.TotalMinutes;
+
+        double scheduledTimeMinutes = 0;
+
+        foreach (ScheduledEvent scheduledEvent in taskboardTask.Events)
+        {
+            scheduledTimeMinutes +=
+                scheduledEvent.Duration.TotalMinutes;
+        }
+
+        return scheduledTimeMinutes < expectedTimeMinutes;
     }
 }

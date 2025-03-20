@@ -11,6 +11,13 @@ public class SampleDataService : ISampleDataService
         KhronosophyUser user
     )
     {
+        user.DayStart = SampleDataConstants.DAY_START;
+        user.DayEnd = SampleDataConstants.DAY_END;
+        user.DailyIntensityCapacity =
+            SampleDataConstants.MAX_DAILY_INTENSITY_CAPACITY;
+        user.MinimumEventDurationMinutes =
+            SampleDataConstants.MINIMUM_EVENT_DURATION_MINUTES;
+
         foreach (
             TaskboardTask taskboardTask in
             SampleDataConstants.TASKS_WITH_INTENSITIES
