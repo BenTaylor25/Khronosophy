@@ -18,6 +18,7 @@ public static class UTMTKConstants
     public const int MAX_TASK_INTENSITY = 10;
 
     public const int BREAK_DURATION = 1;
+
     public static readonly EventRequest EVENT_REQUEST_BREAK =
         new(null, TimeSpan.FromHours(BREAK_DURATION));
 }
