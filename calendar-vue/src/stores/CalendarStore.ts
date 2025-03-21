@@ -65,7 +65,8 @@ export const useEventStore = defineStore('events', {
     }
 });
 
-apiGetAllCalendarEvents()
+export function refreshEvents() {
+    apiGetAllCalendarEvents()
     .then(serverEvents => {
         const eventStore = useEventStore();
 
@@ -73,3 +74,6 @@ apiGetAllCalendarEvents()
             eventStore.events.push(event);
         });
     })
+}
+
+refreshEvents();

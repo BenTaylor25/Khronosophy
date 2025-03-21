@@ -5,13 +5,13 @@ public class ScheduledEvent(
     string name,
     DateTime startDateTime,
     DateTime endDateTime,
-    TaskboardTask parentTask
+    Guid parentTaskId
 ) : IEvent
 {
     public string Name { get; set; } = name;
     public DateTime StartDateTime { get; set; } = startDateTime;
     public DateTime EndDateTime { get; set; } = endDateTime;
-    public TaskboardTask ParentTask { get; set; } = parentTask;
+    public Guid ParentTaskId { get; } = parentTaskId;
 
     public TimeSpan Duration
     {

@@ -139,7 +139,7 @@ public class UTMTKScheduler(UTMTKSettings settings) : IScheduler
             if (
                 !eventAddedThisIteration &&
                 unscheduledHoursUntilEndOfDay > MAX_UNACCOUNTED_TIME
-                // TODO: Check that their is time to be scheduled in taskboard.
+                // TODO: Check that there is time to be scheduled in taskboard.
             )
             {
                 tasksForDay.Add(Constants.EVENT_REQUEST_BREAK);

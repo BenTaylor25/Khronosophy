@@ -6,6 +6,8 @@ export const API_CALENDAR_EVENTS_ROUTE = `${SERVER_URL}/events`
 export const API_TASK_ROUTE = `${SERVER_URL}/taskboard`
 export const API_USER_ROUTE = `${SERVER_URL}/user`
 
+export const API_UTMTK_SCHEDULE_ROUTE = `${SERVER_URL}/schedule/utmtk`;
+
 export const NOT_SYNCED = "NOT SYNCED WITH SERVER";
 
 export const JSON_HEADERS = {

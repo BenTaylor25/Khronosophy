@@ -6,6 +6,7 @@ namespace Calendar.Models;
 
 public class TaskboardTask
 {
+    public Guid Id { get; }
     public string Name { get; set; }
     public TimeSpan ExpectedDuration { get; set; }
 
@@ -21,10 +22,28 @@ public class TaskboardTask
         double? intensity = null
     )
     {
+        Id = Guid.NewGuid();
         Name = name;
         ExpectedDuration = expectedDuration;
         Importance = importance;
         Intensity = intensity;
+    }
+
+    public TimeSpan TimeToBeScheduled()
+    {
+        TimeSpan timeToBeScheduled = ExpectedDuration;
+
+        foreach (ScheduledEvent scheduledEvent in Events)
+        {
+            timeToBeScheduled -= scheduledEvent.Duration;
+        }
+
+        if (timeToBeScheduled < TimeSpan.Zero)
+        {
+            timeToBeScheduled = TimeSpan.Zero;
+        }
+
+        return timeToBeScheduled;
     }
 
     public static ErrorOr<TaskboardTask> Create(
