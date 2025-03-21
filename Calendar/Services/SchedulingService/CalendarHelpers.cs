@@ -29,35 +29,16 @@ public static class CalendarHelpers
         List<EventRequest>? eventRequests = null
     )
     {
-        double expectedTimeMinutes =
-            taskboardTask.ExpectedDuration.TotalMinutes;
-
-        double scheduledTimeMinutes = 0;
-
-        foreach (ScheduledEvent scheduledEvent in taskboardTask.Events)
-        {
-            scheduledTimeMinutes +=
-                scheduledEvent.Duration.TotalMinutes;
-        }
+        double timeToScheduleMinutes =
+            taskboardTask.TimeToBeScheduled().TotalMinutes;
 
         if (eventRequests != null)
         {
-            // TimeRequestedMinutes()   TODO
-
-            foreach (EventRequest eventRequest in eventRequests)
-            {
-                if (
-                    eventRequest.ParentTask is TaskboardTask parent &&
-                    parent == taskboardTask
-                )
-                {
-                    scheduledTimeMinutes +=
-                        eventRequest.Duration.TotalMinutes;
-                }
-            }
+            timeToScheduleMinutes -=
+                TimeRequestedMinutes(eventRequests, taskboardTask);
         }
 
-        return scheduledTimeMinutes < expectedTimeMinutes;
+        return timeToScheduleMinutes > 0;
     }
 
     /// <summary>
