@@ -140,13 +140,12 @@ public class UTMTKService : IUTMTKService
             }
 
             bool isTimeRemainingToSchedule =
-                unscheduledHoursUntilEndOfDay * 60 > user.MinimumEventDurationMinutes;
-            // Console.WriteLine(unscheduledHoursUntilEndOfDay);
+                unscheduledHoursUntilEndOfDay * 60 >
+                user.MinimumEventDurationMinutes;
 
             if (
                 !eventAddedThisIteration &&
                 isTimeRemainingToSchedule
-                // TODO: Check that there is time to be scheduled in taskboard.
             )
             {
                 tasksForDay.Add(UTMTKConstants.EVENT_REQUEST_BREAK);
@@ -222,9 +221,7 @@ public class UTMTKService : IUTMTKService
 
                 if (_wrappedDays != 0)
                 {
-                    // Console.WriteLine(
-                    //     "No further events can be scheduled today."
-                    // );
+                    // No further events may be scheduled today.
                     return;
                 }
             }
@@ -280,7 +277,6 @@ public class UTMTKService : IUTMTKService
         TimeOnly dayStart,
         TimeOnly dayEnd,
         TimeSpan minimumEventDuration
-        // previousTask
     )
     {
         // We want to restrict this function to a specified date.
@@ -313,14 +309,6 @@ public class UTMTKService : IUTMTKService
                 return null;
             }
             #endregion
-        }
-
-        // When scheduling more than one event, all will be given
-        // the same nextEventStart unless we offset them from the
-        // the previous.
-        if (false)
-        {
-
         }
 
         // If there is not enough time in the day to satisfy the
