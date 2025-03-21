@@ -26,8 +26,6 @@ public class UTMTKService : IUTMTKService
 
         while (CalendarHelpers.ShouldScheduleTasks(tasksByImportance))
         {
-            // Console.WriteLine($"scheduling for {dateToSchedule}");
-
             ScheduleEventsForDay(user, tasksByImportance, dateToSchedule);
 
             dateToSchedule = dateToSchedule.AddDays(1);
