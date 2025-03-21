@@ -24,7 +24,10 @@ public static class CalendarHelpers
         return false;
     }
 
-    public static bool ShouldScheduleTask(TaskboardTask taskboardTask)
+    public static bool ShouldScheduleTask(
+        TaskboardTask taskboardTask,
+        List<EventRequest>? eventRequests = null
+    )
     {
         double expectedTimeMinutes =
             taskboardTask.ExpectedDuration.TotalMinutes;
@@ -37,6 +40,50 @@ public static class CalendarHelpers
                 scheduledEvent.Duration.TotalMinutes;
         }
 
+        if (eventRequests != null)
+        {
+            // TimeRequestedMinutes()   TODO
+
+            foreach (EventRequest eventRequest in eventRequests)
+            {
+                if (
+                    eventRequest.ParentTask is TaskboardTask parent &&
+                    parent == taskboardTask
+                )
+                {
+                    scheduledTimeMinutes +=
+                        eventRequest.Duration.TotalMinutes;
+                }
+            }
+        }
+
         return scheduledTimeMinutes < expectedTimeMinutes;
+    }
+
+    /// <summary>
+    /// Return the total time requested either by a particular task or
+    /// overall (if taskboardTask is not specified).
+    /// </summary>
+    public static double TimeRequestedMinutes(
+        List<EventRequest> eventRequests,
+        TaskboardTask? taskboardTask = null
+    )
+    {
+        double timeRequestedMinutes = 0;
+
+        foreach (EventRequest eventRequest in eventRequests)
+        {
+            bool thisTaskIsSpecified =
+                eventRequest.ParentTask == taskboardTask;
+
+            bool shouldCountAllTasks = taskboardTask == null;
+
+            if (thisTaskIsSpecified || shouldCountAllTasks)
+            {
+                timeRequestedMinutes += eventRequest.Duration.TotalMinutes;
+            }
+        }
+
+        return timeRequestedMinutes;
     }
 }

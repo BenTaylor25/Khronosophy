@@ -112,7 +112,10 @@ public class UTMTKService : IUTMTKService
                         user.MinimumEventDurationMinutes;
 
                 bool taskNeedsMoreEvents =
-                    CalendarHelpers.ShouldScheduleTask(taskboardTask);
+                    CalendarHelpers.ShouldScheduleTask(
+                        taskboardTask,
+                        tasksForDay
+                    );
 
                 if (
                     isIntensityInRange &&
@@ -122,7 +125,9 @@ public class UTMTKService : IUTMTKService
                 {
                     TimeSpan duration = GetDurationForEventRequest(
                         taskboardTask,
-                        unscheduledHoursUntilEndOfDay
+                        unscheduledHoursUntilEndOfDay,
+                        tasksForDay,
+                        user.MinimumEventDurationMinutes!.Value
                     );
 
                     tasksForDay.Add(
@@ -190,7 +195,8 @@ public class UTMTKService : IUTMTKService
         {
             if (
                 eventRequest.ParentTask is TaskboardTask parentTask &&
-                parentTask.Intensity is double intensity
+                parentTask.Intensity is double intensity &&
+                nextEventStart.Add(eventRequest.Duration) <= user.DayEnd
             )
             {
                 DateTime startDateTime = new(date, nextEventStart);
@@ -208,7 +214,7 @@ public class UTMTKService : IUTMTKService
                 double breakDurationHours =
                     eventRequest.Duration.TotalHours * intensity / 20;
                 double breakDurationHoursRounded =
-                    15 * Math.Ceiling(breakDurationHours / 15);
+                    15 * Math.Ceiling(breakDurationHours * 60 / 15) / 60;
                 TimeSpan breakDuration =
                     TimeSpan.FromHours(breakDurationHoursRounded);
 
@@ -221,6 +227,7 @@ public class UTMTKService : IUTMTKService
                     // Console.WriteLine(
                     //     "No further events can be scheduled today."
                     // );
+                    return;
                 }
             }
         }
@@ -228,7 +235,9 @@ public class UTMTKService : IUTMTKService
 
     private TimeSpan GetDurationForEventRequest(
         TaskboardTask taskboardTask,
-        double unscheduledHoursUntilEndOfDay
+        double unscheduledHoursUntilEndOfDay,
+        List<EventRequest> tasksForDay,
+        int minimumEventDurationMinutes
     )
     {
         if (taskboardTask.Intensity is double intensity)
@@ -242,12 +251,23 @@ public class UTMTKService : IUTMTKService
             double maxTaskTimeHoursQuarterHourIncrement =
                 Math.Ceiling(4 * maxTaskTimeHours) / 4;
 
-            // double remainingTaskDurationToScheduleHours = something on task
+            double remainingTaskDurationToScheduleMinutes =
+                taskboardTask.TimeToBeScheduled().TotalMinutes -
+                CalendarHelpers.TimeRequestedMinutes(
+                    tasksForDay,
+                    taskboardTask
+                );
+
 
             double durationHours = Math.Min(
-                maxTaskTimeHoursQuarterHourIncrement,
-                unscheduledHoursUntilEndOfDay
-                // task duration to schedule
+                Math.Min(
+                    maxTaskTimeHoursQuarterHourIncrement,
+                    unscheduledHoursUntilEndOfDay
+                ),
+                Math.Max(
+                    remainingTaskDurationToScheduleMinutes / 60d,
+                    minimumEventDurationMinutes / 60d
+                )
             );
 
             return TimeSpan.FromHours(durationHours);

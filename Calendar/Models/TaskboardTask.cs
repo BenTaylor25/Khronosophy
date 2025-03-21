@@ -29,6 +29,23 @@ public class TaskboardTask
         Intensity = intensity;
     }
 
+    public TimeSpan TimeToBeScheduled()
+    {
+        TimeSpan timeToBeScheduled = ExpectedDuration;
+
+        foreach (ScheduledEvent scheduledEvent in Events)
+        {
+            timeToBeScheduled -= scheduledEvent.Duration;
+        }
+
+        if (timeToBeScheduled < TimeSpan.Zero)
+        {
+            timeToBeScheduled = TimeSpan.Zero;
+        }
+
+        return timeToBeScheduled;
+    }
+
     public static ErrorOr<TaskboardTask> Create(
         string name,
         TimeSpan expectedDuration,
