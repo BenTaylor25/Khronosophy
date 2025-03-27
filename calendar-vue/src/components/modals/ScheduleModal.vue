@@ -3,6 +3,7 @@ import { MODAL_IDS } from '../../constants/modalConstants.ts';
 import { hideScheduleModal} from '../../modalController.ts';
 import { refreshEvents } from '../../stores/CalendarStore.ts';
 import { apiUTMTKSchedule } from '../../api/Scheduling/UTMTKSchedule.ts';
+import { apiETFSchedule } from '../../api/Scheduling/ETFSchedule.ts';
 
 import ModalShadow from './ModalShadow.vue';
 </script>
@@ -36,6 +37,7 @@ import ModalShadow from './ModalShadow.vue';
 
         <button
           id="etf-scheduler"
+          @click="scheduleETF()"
         >
           ETF Scheduler
         </button>
@@ -56,6 +58,11 @@ import ModalShadow from './ModalShadow.vue';
 
 <script lang="ts">
 
+async function scheduleETF() {
+  await apiETFSchedule();
+  refreshEvents();
+  hideScheduleModal();
+}
 
 async function scheduleUTMTK() {
   await apiUTMTKSchedule();
