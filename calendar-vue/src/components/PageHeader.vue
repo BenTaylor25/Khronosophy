@@ -3,7 +3,8 @@ import {
   showZoomSettingsModal,
   showYearViewModal,
   showTasksModal,
-  showScheduleModal
+  showScheduleModal,
+  showSampleDataModal
 } from '../modalController.ts';
 import { useDateStore } from '../stores/DateStore.ts';
 
@@ -45,6 +46,13 @@ const dateStore = useDateStore();
         @click="showScheduleModal()"
       >
         <p>Schedule</p>
+      </div>
+
+      <div
+        id="sample-data"
+        @click="showSampleDataModal()"
+      >
+        <p>Sample Data</p>
       </div>
 
     </div>

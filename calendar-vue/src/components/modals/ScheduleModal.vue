@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MODAL_IDS } from '../../constants/modalConstants.ts';
-import { hideScheduleModal} from '../../modalController.ts';
+import { hideScheduleModal } from '../../modalController.ts';
 import { refreshEvents } from '../../stores/CalendarStore.ts';
 import { apiUTMTKSchedule } from '../../api/Scheduling/UTMTKSchedule.ts';
 import { apiETFSchedule } from '../../api/Scheduling/ETFSchedule.ts';
