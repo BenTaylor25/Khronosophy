@@ -68,14 +68,17 @@ public class ETFService : IETFService
 
         foreach (TaskboardTask taskboardTask in tasksByImportance)
         {
-            if (
-                timeUntilEndOfWorkingDay.TotalMinutes >=
-                user.MinimumEventDurationMinutes
-            )
-            {
-                TimeSpan taskRemainingDuration =
-                    RemainingDuration(taskboardTask);
+            TimeSpan taskRemainingDuration =
+                RemainingDuration(taskboardTask);
+            bool taskRequiresMoreTime =
+                taskRemainingDuration > TimeSpan.Zero;
 
+            bool isEnoughTimeForAnotherEvent =
+                timeUntilEndOfWorkingDay.TotalMinutes >=
+                user.MinimumEventDurationMinutes;
+
+            if (taskRequiresMoreTime && isEnoughTimeForAnotherEvent)
+            {
                 // Min(taskRemainingDuration, timeUntilEndOfWorkingDay);
                 TimeSpan eventDuration =
                     taskRemainingDuration > timeUntilEndOfWorkingDay ?
