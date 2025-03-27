@@ -16,13 +16,68 @@ public class ETFService : IETFService
             return validation.Errors;
         }
 
-        // tasks by importance
+        List<TaskboardTask> tasksByImportance =
+            user.Taskboard.Tasks
+                .OrderByDescending(task => task.Importance)
+                .ToList();
 
-        // time in working day
+        TimeOnly workingDayEnd = CalculateWorkingDayEnd(
+            user.DayStart!.Value,
+            user.DayEnd!.Value
+        );
 
-        // schedule for day
+        DateOnly dateToSchedule = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        while (CalendarHelpers.ShouldScheduleTasks(tasksByImportance))
+        {
+            ScheduleEventsForDay(user, tasksByImportance, dateToSchedule);
+
+            dateToSchedule = dateToSchedule.AddDays(1);
+        }
 
         return new Success();
+    }
+
+    private void ScheduleEventsForDay(
+        KhronosophyUser user,
+        List<TaskboardTask> tasksByImportance,
+        DateOnly date
+    )
+    {
+
+    }
+
+    private TimeOnly CalculateWorkingDayEnd(
+        TimeOnly dayStart,
+        TimeOnly dayEnd
+    )
+    {
+        TimeSpan dayDuration = dayEnd - dayStart;
+        double dayDurationMinutes = dayDuration.TotalMinutes;
+
+        double workingDayDurationMinutes =
+            dayDurationMinutes * ETFConstants.WORKING_DAY_RATIO;
+        double workingDayDurationMinutesRounded =
+            15 * Math.Floor(workingDayDurationMinutes / 15);
+        TimeSpan workingDayDuration =
+            TimeSpan.FromMinutes(workingDayDurationMinutesRounded);
+
+        TimeOnly workingDayEnd = dayStart.Add(
+            workingDayDuration,
+            out int _wrappedDays
+        );
+
+        #region Error Handling
+        if (_wrappedDays != 0)
+        {
+            // Something has gone horribly wrong.
+            throw new InvalidOperationException(
+                "Working Day End calculation overflowed"
+            );
+        }
+        #endregion
+
+        return workingDayEnd;
     }
 
     private ErrorOr<Success> ParameterValidation(KhronosophyUser user)
