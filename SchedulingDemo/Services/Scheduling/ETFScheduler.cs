@@ -13,7 +13,15 @@ public class ETFScheduler : IScheduler
 
     private readonly TimeSpan MINIMIUM_EVENT_LENGTH = new(1, 0, 0);
 
-    private readonly TimeSpan BREAK_DURATION = new(0, 15, 0);
+    // Eat That Frog! does not go into great detail about time breaks
+    // like UTMTK does.
+    // It does suggest maximising times of high energy which implies that
+    // recovery between tasks is important.
+    // It also states explicitly that you should make use of momentum and
+    // hit a milestone at the end of every working session. A break of 30
+    // minutes allows the user some leeway to finish what they're doing
+    // while still having somewhat of a break.
+    private readonly TimeSpan BREAK_DURATION = new(0, 30, 0);
 
     /// <summary>
     /// ETF Philosophy:
@@ -22,7 +30,6 @@ public class ETFScheduler : IScheduler
     /// ETF Method:
     /// Split the day into 3rds.
     /// The first 2/3rds of the day is dedicated to working in order of
-    //. Importance. Q: WHAT DOES ETF SAY ABOUT BREAKS?
     /// The final 1/3rd cannot schedule events with an Intensity higher
     /// than 1. It's implied to be left empty (for the user to fill with
     /// leisurely static events manually).
