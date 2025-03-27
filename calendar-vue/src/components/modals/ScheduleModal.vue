@@ -29,11 +29,12 @@ import ModalShadow from './ModalShadow.vue';
 
       <div id="algorithms">
 
-        <button
+        <!-- There is little value adding this right now. -->
+        <!-- <button
           id="dumb-scheduler"
         >
           Dumb Scheduler
-        </button>
+        </button> -->
 
         <button
           id="etf-scheduler"
@@ -57,7 +58,6 @@ import ModalShadow from './ModalShadow.vue';
 </template>
 
 <script lang="ts">
-
 async function scheduleETF() {
   await apiETFSchedule();
   refreshEvents();
@@ -69,7 +69,6 @@ async function scheduleUTMTK() {
   refreshEvents();
   hideScheduleModal();
 }
-
 </script>
 
 <style scoped lang="scss">
