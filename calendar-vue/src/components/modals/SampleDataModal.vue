@@ -15,7 +15,16 @@ import ModalShadow from './ModalShadow.vue';
       @click.stop
     >
 
-    
+      <button
+      >
+        Load Data
+      </button>
+
+      <button
+        id="reset-button"
+      >
+        Reset Data
+      </button>
 
     </div>
   </modal-shadow>
@@ -31,6 +40,7 @@ import ModalShadow from './ModalShadow.vue';
   flex-direction: column;
   background-color: bisque;
   border-radius: 8px;
+  display: flex;
   justify-content: center;
   align-items: center;
   top: 30%;
@@ -53,9 +63,9 @@ import ModalShadow from './ModalShadow.vue';
     background-color: darkcyan;
     cursor: pointer;
 
-    // &#reset-button {
-    //   background-color: darkred;
-    // }
+    &#reset-button {
+      background-color: darkred;
+    }
   }
 }
 </style>
