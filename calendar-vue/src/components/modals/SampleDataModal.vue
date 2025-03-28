@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { MODAL_IDS } from '../../constants/modalConstants.ts';
 import { apiClearSampleData } from '../../api/SampleData/clearSampleData.ts';
 import { apiLoadSampleData } from '../../api/SampleData/loadSampleData.ts';
-import { MODAL_IDS } from '../../constants/modalConstants.ts';
 import { hideSampleDataModal } from '../../modalController.ts';
 import { refreshEvents } from '../../stores/CalendarStore.ts';
 import { refreshTasks } from '../../stores/TasksStore.ts';
