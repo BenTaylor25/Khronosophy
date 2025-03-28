@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { apiLoadSampleData } from '../../api/SampleData/loadSampleData.ts';
 import { MODAL_IDS } from '../../constants/modalConstants.ts';
 import { hideSampleDataModal } from '../../modalController.ts';
+import { refreshEvents } from '../../stores/CalendarStore.ts';
+import { refreshTasks } from '../../stores/TasksStore.ts';
 
 import ModalShadow from './ModalShadow.vue';
 </script>
@@ -16,6 +19,7 @@ import ModalShadow from './ModalShadow.vue';
     >
 
       <button
+        @click="loadSampleData()"
       >
         Load Data
       </button>
@@ -31,6 +35,12 @@ import ModalShadow from './ModalShadow.vue';
 </template>
 
 <script lang="ts">
+async function loadSampleData() {
+  await apiLoadSampleData();
+  refreshTasks();
+  refreshEvents();
+  hideSampleDataModal();
+}
 
 </script>
 

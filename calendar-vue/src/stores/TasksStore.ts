@@ -25,11 +25,15 @@ export const useTasksStore = defineStore('tasks', {
     }
 });
 
-apiGetAllTasks()
-    .then(tasks => {
-        const taskStore = useTasksStore();
-
-        tasks.forEach(task => {
-            taskStore.addTask(task);
+export function refreshTasks() {
+    apiGetAllTasks()
+        .then(tasks => {
+            const taskStore = useTasksStore();
+            
+            tasks.forEach(task => {
+                taskStore.addTask(task);
+            });
         });
-    });
+}
+
+refreshTasks();
