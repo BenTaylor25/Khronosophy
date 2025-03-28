@@ -102,4 +102,26 @@ public class SchedulingController : AppBaseController
         }
         return Ok();
     }
+
+    [HttpDelete("/schedule/unscheduleTasks/{userId}")]
+    public IActionResult UnscheduleTasks(Guid userId)
+    {
+        ErrorOr<KhronosophyUser> userServiceResponse =
+            _userService.GetUser(userId);
+
+        if (userServiceResponse.IsError)
+        {
+            return Problem("User does not exist.");
+        }
+        KhronosophyUser user = userServiceResponse.Value;
+
+        ErrorOr<Deleted> userServiceClearScheduleResponse =
+            _userService.ClearScheduledEvents(user);
+
+        if (userServiceClearScheduleResponse.IsError)
+        {
+            return Problem("Failed to clear schedule");
+        }
+        return Ok();
+    }
 }
