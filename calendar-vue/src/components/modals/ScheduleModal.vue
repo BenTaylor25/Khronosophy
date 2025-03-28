@@ -6,6 +6,7 @@ import { apiUTMTKSchedule } from '../../api/Scheduling/UTMTKSchedule.ts';
 import { apiETFSchedule } from '../../api/Scheduling/ETFSchedule.ts';
 
 import ModalShadow from './ModalShadow.vue';
+import { apiClearScheduledEvents } from '../../api/Scheduling/clearScheduledEvents.ts';
 </script>
 
 <template>
@@ -23,6 +24,7 @@ import ModalShadow from './ModalShadow.vue';
 
       <button
         id="reset-button"
+        @click="clearScheduledEvents()"
       >
         Reset Tasks
       </button>
@@ -58,6 +60,12 @@ import ModalShadow from './ModalShadow.vue';
 </template>
 
 <script lang="ts">
+async function clearScheduledEvents() {
+  await apiClearScheduledEvents();
+  refreshEvents();
+  hideScheduleModal();
+}
+
 async function scheduleETF() {
   await apiETFSchedule();
   refreshEvents();
