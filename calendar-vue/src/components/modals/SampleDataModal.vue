@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { apiClearSampleData } from '../../api/SampleData/clearSampleData.ts';
 import { apiLoadSampleData } from '../../api/SampleData/loadSampleData.ts';
 import { MODAL_IDS } from '../../constants/modalConstants.ts';
 import { hideSampleDataModal } from '../../modalController.ts';
@@ -26,6 +27,7 @@ import ModalShadow from './ModalShadow.vue';
 
       <button
         id="reset-button"
+        @click="clearSampleData()"
       >
         Reset Data
       </button>
@@ -42,6 +44,12 @@ async function loadSampleData() {
   hideSampleDataModal();
 }
 
+async function clearSampleData() {
+  await apiClearSampleData();
+  refreshTasks();
+  refreshEvents();
+  hideSampleDataModal();
+}
 </script>
 
 <style scoped lang="scss">
