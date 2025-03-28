@@ -61,6 +61,9 @@ export const useEventStore = defineStore('events', {
             }
 
             return eventsForDate;
+        },
+        removeAll() {
+            this.events = [];
         }
     }
 });
@@ -69,6 +72,8 @@ export function refreshEvents() {
     apiGetAllCalendarEvents()
     .then(serverEvents => {
         const eventStore = useEventStore();
+
+        eventStore.removeAll();
 
         serverEvents.forEach(event => {
             eventStore.events.push(event);

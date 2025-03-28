@@ -21,6 +21,9 @@ export const useTasksStore = defineStore('tasks', {
             // #endregion
 
             this.tasks.splice(idx, 1);
+        },
+        removeAll() {
+            this.tasks = [];
         }
     }
 });
@@ -29,7 +32,9 @@ export function refreshTasks() {
     apiGetAllTasks()
         .then(tasks => {
             const taskStore = useTasksStore();
-            
+
+            taskStore.removeAll();
+
             tasks.forEach(task => {
                 taskStore.addTask(task);
             });
