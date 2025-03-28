@@ -9,6 +9,15 @@ export const API_USER_ROUTE = `${SERVER_URL}/user`
 export const API_ETF_SCHEDULE_ROUTE = `${SERVER_URL}/schedule/etf`;
 export const API_UTMTK_SCHEDULE_ROUTE = `${SERVER_URL}/schedule/utmtk`;
 
+export const API_SAMPLE_DATA_ROUTE =
+    `${SERVER_URL}/sampleData/loadWithTasksAndIntensities`;
+
+export const API_CLEAR_SAMPLE_DATA_ROUTE =
+    `${SERVER_URL}/sampleData/clearAll`;
+
+export const API_CLEAR_SCHEDULED_EVENTS_ROUTE =
+    `${SERVER_URL}/schedule/unscheduleTasks`;
+
 export const NOT_SYNCED = "NOT SYNCED WITH SERVER";
 
 export const JSON_HEADERS = {

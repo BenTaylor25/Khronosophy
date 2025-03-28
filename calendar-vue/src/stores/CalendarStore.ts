@@ -5,24 +5,7 @@ import { apiGetAllCalendarEvents } from "../api/CalendarEvents/getAllEvents.ts";
 
 export const useEventStore = defineStore('events', {
     state: () => ({
-        events: [
-            new CalendarEventModel(
-                "wed 7 aug 24 test",
-                // This is 7th AUGUST because JavaScript is stupid.
-                new Date(2024, 7, 7, 10, 0, 0, 0),
-                new Date(2024, 7, 7, 12, 0, 0, 0)
-            ),
-            new CalendarEventModel(
-                "fri 2 aug 2024 test",
-                new Date(2024, 7, 2, 12, 0, 0, 0),
-                new Date(2024, 7, 2, 16, 0, 0, 0)
-            ),
-            new CalendarEventModel(
-                "first supervisor meeting",
-                new Date(2024, 9, 4, 15, 0, 0),
-                new Date(2024, 9, 4, 15, 30, 0)
-            )
-        ] as CalendarEventModel[],
+        events: [] as CalendarEventModel[],
         selectedEvent: null as CalendarEventModel | null
     }),
     actions: {
@@ -61,6 +44,9 @@ export const useEventStore = defineStore('events', {
             }
 
             return eventsForDate;
+        },
+        removeAll() {
+            this.events = [];
         }
     }
 });
@@ -69,6 +55,8 @@ export function refreshEvents() {
     apiGetAllCalendarEvents()
     .then(serverEvents => {
         const eventStore = useEventStore();
+
+        eventStore.removeAll();
 
         serverEvents.forEach(event => {
             eventStore.events.push(event);

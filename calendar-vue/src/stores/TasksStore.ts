@@ -21,15 +21,24 @@ export const useTasksStore = defineStore('tasks', {
             // #endregion
 
             this.tasks.splice(idx, 1);
+        },
+        removeAll() {
+            this.tasks = [];
         }
     }
 });
 
-apiGetAllTasks()
-    .then(tasks => {
-        const taskStore = useTasksStore();
+export function refreshTasks() {
+    apiGetAllTasks()
+        .then(tasks => {
+            const taskStore = useTasksStore();
 
-        tasks.forEach(task => {
-            taskStore.addTask(task);
+            taskStore.removeAll();
+
+            tasks.forEach(task => {
+                taskStore.addTask(task);
+            });
         });
-    });
+}
+
+refreshTasks();

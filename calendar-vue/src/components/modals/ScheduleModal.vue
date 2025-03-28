@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { MODAL_IDS } from '../../constants/modalConstants.ts';
-import { hideScheduleModal} from '../../modalController.ts';
+import { hideScheduleModal } from '../../modalController.ts';
 import { refreshEvents } from '../../stores/CalendarStore.ts';
 import { apiUTMTKSchedule } from '../../api/Scheduling/UTMTKSchedule.ts';
 import { apiETFSchedule } from '../../api/Scheduling/ETFSchedule.ts';
 
 import ModalShadow from './ModalShadow.vue';
+import { apiClearScheduledEvents } from '../../api/Scheduling/clearScheduledEvents.ts';
+import { refreshTasks } from '../../stores/TasksStore.ts';
 </script>
 
 <template>
@@ -23,17 +25,19 @@ import ModalShadow from './ModalShadow.vue';
 
       <button
         id="reset-button"
+        @click="clearScheduledEvents()"
       >
         Reset Tasks
       </button>
 
       <div id="algorithms">
 
-        <button
+        <!-- There is little value adding this right now. -->
+        <!-- <button
           id="dumb-scheduler"
         >
           Dumb Scheduler
-        </button>
+        </button> -->
 
         <button
           id="etf-scheduler"
@@ -57,6 +61,12 @@ import ModalShadow from './ModalShadow.vue';
 </template>
 
 <script lang="ts">
+async function clearScheduledEvents() {
+  await apiClearScheduledEvents();
+  refreshEvents();
+  refreshTasks();
+  hideScheduleModal();
+}
 
 async function scheduleETF() {
   await apiETFSchedule();
@@ -69,7 +79,6 @@ async function scheduleUTMTK() {
   refreshEvents();
   hideScheduleModal();
 }
-
 </script>
 
 <style scoped lang="scss">

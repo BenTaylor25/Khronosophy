@@ -96,3 +96,12 @@ export const showScheduleModal = () => {
 export const hideScheduleModal = () => {
     hideElementWithId(MODAL_IDS.SCHEDULE_MODAL);
 }
+
+// Sample Data View.
+export const showSampleDataModal = () => {
+    showElementWithId(MODAL_IDS.SAMPLE_DATA_MODAL);
+}
+
+export const hideSampleDataModal = () => {
+    hideElementWithId(MODAL_IDS.SAMPLE_DATA_MODAL);
+}

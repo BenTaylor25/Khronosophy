@@ -1,6 +1,7 @@
 using ErrorOr;
 
 using Calendar.Models;
+using Calendar.Models.Events;
 
 namespace Calendar.Services.UserService;
 
@@ -38,6 +39,30 @@ public class UserService : IUserService
     {
         Users.Add(user.Id, user);
         return Result.Updated;
+    }
+
+    public ErrorOr<Deleted> ClearScheduledEvents(KhronosophyUser user)
+    {
+        // Events.
+        int listLen = user.EventCalendar.Events.Count;
+
+        for (int i = listLen - 1; i >= 0; i--)
+        {
+            IEvent calendarEvent = user.EventCalendar.Events[i];
+
+            if (calendarEvent is ScheduledEvent scheduledEvent)
+            {
+                user.EventCalendar.Events.RemoveAt(i);
+            }
+        }
+
+        // Tasks.
+        foreach (TaskboardTask taskboardTask in user.Taskboard.Tasks)
+        {
+            taskboardTask.Events = [];
+        }
+
+        return new Deleted();
     }
 
     public ErrorOr<Deleted> ClearAllUsers()
