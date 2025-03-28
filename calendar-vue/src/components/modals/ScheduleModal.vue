@@ -7,6 +7,7 @@ import { apiETFSchedule } from '../../api/Scheduling/ETFSchedule.ts';
 
 import ModalShadow from './ModalShadow.vue';
 import { apiClearScheduledEvents } from '../../api/Scheduling/clearScheduledEvents.ts';
+import { refreshTasks } from '../../stores/TasksStore.ts';
 </script>
 
 <template>
@@ -63,6 +64,7 @@ import { apiClearScheduledEvents } from '../../api/Scheduling/clearScheduledEven
 async function clearScheduledEvents() {
   await apiClearScheduledEvents();
   refreshEvents();
+  refreshTasks();
   hideScheduleModal();
 }
 

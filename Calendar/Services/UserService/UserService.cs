@@ -43,6 +43,7 @@ public class UserService : IUserService
 
     public ErrorOr<Deleted> ClearScheduledEvents(KhronosophyUser user)
     {
+        // Events.
         int listLen = user.EventCalendar.Events.Count;
 
         for (int i = listLen - 1; i >= 0; i--)
@@ -53,6 +54,12 @@ public class UserService : IUserService
             {
                 user.EventCalendar.Events.RemoveAt(i);
             }
+        }
+
+        // Tasks.
+        foreach (TaskboardTask taskboardTask in user.Taskboard.Tasks)
+        {
+            taskboardTask.Events = [];
         }
 
         return new Deleted();
