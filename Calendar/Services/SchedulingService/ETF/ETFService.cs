@@ -54,7 +54,7 @@ public class ETFService : IETFService
         TimeOnly? nextEventStart = GetNextEventStart(
             date,
             user.DayStart!.Value,
-            user.DayEnd!.Value,
+            workingDayEnd,
             TimeSpan.FromMinutes(user.MinimumEventDurationMinutes!.Value)
         );
 
